@@ -89,7 +89,7 @@ app.post('/webhooks/:service', express.raw({ type: 'application/json' }), async 
     logger.info(`Webhook received from ${service}:`, payload);
 
     // Queue webhook processing
-    await QueueService.addWebhookJob(service, payload);
+    await QueueService.getInstance().addWebhookJob(service, payload);
 
     res.json({ success: true, message: 'Webhook processed' });
   } catch (error) {
@@ -126,7 +126,7 @@ async function startServer() {
     await initializeDatabase();
 
     // Initialize queue service
-    await QueueService.initialize();
+    await QueueService.getInstance().initialize();
 
     app.listen(PORT, () => {
       logger.info(`🚀 Impact Autopilot API server running on port ${PORT}`);

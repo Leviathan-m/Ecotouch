@@ -30,6 +30,16 @@ export class QueueService {
     }
   }
 
+  async addWebhookJob(webhookUrl: string, payload: any): Promise<void> {
+    try {
+      // TODO: Add webhook job to queue
+      logger.info('Webhook job added to queue', { webhookUrl, payload });
+    } catch (error) {
+      logger.error('Failed to add webhook job', error);
+      throw error;
+    }
+  }
+
   async processJobs(): Promise<void> {
     try {
       // TODO: Process jobs from queue
