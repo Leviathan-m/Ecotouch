@@ -11,6 +11,7 @@ import automationRoutes from './controllers/automation';
 import receiptRoutes from './controllers/receipts';
 import sbtRoutes from './controllers/sbt';
 import userRoutes from './controllers/user';
+import healthRoutes from './controllers/health';
 
 // Middleware
 import { errorHandler } from './middleware/errorHandler';
@@ -72,6 +73,9 @@ app.get('/health', (req, res) => {
     version: '1.0.0',
   });
 });
+
+// Health check routes (no auth required)
+app.use('/api', healthRoutes);
 
 // API routes
 app.use('/api/missions', telegramAuth, missionRoutes);

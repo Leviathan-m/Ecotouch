@@ -1,0 +1,75 @@
+# Production Dockerfile for Ecotouch Backend
+# Multi-stage build for optimized production image
+
+# =============================================================================
+# BUILD STAGE: Compile TypeScript and install dependencies
+# =============================================================================
+FROM node:18-alpine AS builder
+
+# Install build dependencies
+RUN apk add --no-cache \
+    python3 \
+    make \
+    g++ \
+    git \
+    && rm -rf /var/cache/apk/*
+
+# Set working directory
+WORKDIR /app
+
+# Copy package files for better caching
+COPY package*.json ./
+
+# Install ALL dependencies (including dev dependencies for building)
+RUN npm ci --legacy-peer-deps && npm cache clean --force
+
+# Copy source code
+COPY . .
+
+# Build TypeScript
+RUN npm run build
+
+# =============================================================================
+# PRODUCTION STAGE: Create optimized runtime image
+# =============================================================================
+FROM node:18-alpine AS production
+
+# Install dumb-init for proper signal handling
+RUN apk add --no-cache dumb-init curl && rm -rf /var/cache/apk/*
+
+# Create app directory
+WORKDIR /app
+
+# Create non-root user for security
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S ecotouch -u 1001
+
+# Copy package files
+COPY package*.json ./
+
+# Install only production dependencies
+RUN npm ci --only=production --legacy-peer-deps && \
+    npm cache clean --force
+
+# Copy built application from builder stage
+COPY --from=builder /app/dist ./dist
+
+# Create necessary directories
+RUN mkdir -p logs uploads && \
+    chown -R ecotouch:nodejs /app
+
+# Switch to non-root user
+USER ecotouch
+
+# Expose port
+EXPOSE 3001
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
+    CMD curl -f http://localhost:3001/api/health || exit 1
+
+# Use dumb-init to handle signals properly
+ENTRYPOINT ["dumb-init", "--"]
+
+# Start production server
+CMD ["npm", "start"]
