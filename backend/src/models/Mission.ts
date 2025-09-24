@@ -113,7 +113,7 @@ export class Mission {
       action,
       status,
       message,
-      metadata,
+      ...(metadata && { metadata }),
     });
   }
 

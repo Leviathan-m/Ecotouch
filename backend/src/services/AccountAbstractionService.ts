@@ -32,8 +32,8 @@ export class AccountAbstractionService {
   constructor(config: AccountAbstractionConfig) {
     this.entryPointAddress = config.entryPointAddress;
     this.accountFactoryAddress = config.accountFactoryAddress;
-    this.paymasterAddress = config.paymasterAddress;
-    this.bundlerUrl = config.bundlerUrl;
+    this.paymasterAddress = config.paymasterAddress || undefined;
+    this.bundlerUrl = config.bundlerUrl || undefined;
 
     // Initialize provider (Polygon mainnet)
     this.provider = new ethers.JsonRpcProvider(
