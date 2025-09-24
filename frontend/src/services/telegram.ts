@@ -29,7 +29,7 @@ export class TelegramService {
     // Expand to full height
     this.webApp.expand();
 
-    // Set theme colors (Impact Autopilot green theme)
+    // Set theme colors (Eco Touch green theme)
     this.webApp.setHeaderColor('#28A745');
     this.webApp.setBackgroundColor('#ffffff');
 

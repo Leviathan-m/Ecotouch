@@ -179,7 +179,7 @@ export const Dashboard: React.FC = () => {
   return (
     <DashboardContainer>
       <Header>
-        <Title>🌱 임팩트 오토파일럿</Title>
+        <Title>🌱 Eco Touch</Title>
         <Subtitle>한 번의 터치로 지구를 지키다</Subtitle>
         {user && (
           <motion.div

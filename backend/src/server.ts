@@ -133,7 +133,7 @@ async function startServer() {
     await QueueService.getInstance().initialize();
 
     app.listen(PORT, () => {
-      logger.info(`🚀 Impact Autopilot API server running on port ${PORT}`);
+      logger.info(`🚀 Eco Touch API server running on port ${PORT}`);
       logger.info(`📱 Telegram WebApp URL: ${process.env.TELEGRAM_WEBAPP_URL}`);
       logger.info(`🌐 Environment: ${process.env.NODE_ENV || 'development'}`);
     });

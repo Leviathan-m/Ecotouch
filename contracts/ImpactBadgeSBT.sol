@@ -9,7 +9,7 @@ import "@openzeppelin/contracts/utils/Strings.sol";
 /**
  * @title Impact Badge Soul Bound Token (ERC-5192)
  * @dev Non-transferable NFT badges for completed impact missions
- * @notice This contract implements ERC-5192 Soul Bound Tokens for Impact Autopilot
+ * @notice This contract implements ERC-5192 Soul Bound Tokens for Eco Touch
  */
 contract ImpactBadgeSBT is ERC721, Ownable {
     using Counters for Counters.Counter;
@@ -52,7 +52,7 @@ contract ImpactBadgeSBT is ERC721, Ownable {
     error InvalidImpactScore();
     error UnauthorizedAccess();
 
-    constructor() ERC721("Impact Autopilot Badge", "IMPACT") {}
+    constructor() ERC721("Eco Touch Badge", "ECOTOUCH") {}
 
     /**
      * @dev Mint a new impact badge

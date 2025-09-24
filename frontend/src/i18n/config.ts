@@ -6,7 +6,7 @@ const resources = {
   ko: {
     translation: {
       // Navigation
-      "app.title": "임팩트 오토파일럿",
+      "app.title": "Eco Touch",
       "app.subtitle": "한 번의 터치로 지구를 지키다",
 
       // Dashboard
@@ -82,7 +82,7 @@ const resources = {
   en: {
     translation: {
       // Navigation
-      "app.title": "Impact Autopilot",
+      "app.title": "Eco Touch",
       "app.subtitle": "Save the planet with one touch",
 
       // Dashboard

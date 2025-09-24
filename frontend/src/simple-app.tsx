@@ -65,7 +65,7 @@ const SimpleApp: React.FC = () => {
   return (
     <div className="app">
       <header className="header">
-        <h1>🌱 임팩트 오토파일럿</h1>
+        <h1>🌱 Eco Touch</h1>
         <p>한 번의 터치로 지구를 지키다</p>
       </header>
 
@@ -111,7 +111,7 @@ const SimpleApp: React.FC = () => {
       </div>
 
       <footer className="footer">
-        <p>Impact Autopilot - Telegram Mini App</p>
+        <p>Eco Touch - Telegram Mini App</p>
       </footer>
     </div>
   );

@@ -110,7 +110,7 @@ const server = http.createServer(async (req, res) => {
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({
       success: true,
-      message: 'Impact Autopilot Backend is running with real database!',
+      message: 'Eco Touch Backend is running with real database!',
       timestamp: new Date().toISOString(),
       version: '1.0.0',
       database: 'connected'
@@ -399,7 +399,7 @@ const server = http.createServer(async (req, res) => {
   res.writeHead(200, { 'Content-Type': 'application/json' });
   res.end(JSON.stringify({
     success: true,
-    message: 'Impact Autopilot Backend Server with Real Database',
+    message: 'Eco Touch Backend Server with Real Database',
     endpoints: [
       'GET /health',
       'GET /api/missions - 실제 데이터베이스에서 미션 목록 조회',
@@ -414,7 +414,7 @@ const server = http.createServer(async (req, res) => {
 async function startServer() {
   await connectDB();
   server.listen(PORT, () => {
-    console.log(`🚀 Impact Autopilot Backend Server running on port ${PORT}`);
+    console.log(`🚀 Eco Touch Backend Server running on port ${PORT}`);
     console.log(`📊 Health check: http://localhost:${PORT}/health`);
     console.log(`🗄️  Database: PostgreSQL connected`);
   });

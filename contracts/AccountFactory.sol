@@ -10,7 +10,7 @@ import "./ImpactAccount.sol";
 
 /**
  * @title Impact Account Factory (ERC-4337)
- * @dev Factory contract for creating ERC-4337 smart accounts for Impact Autopilot users
+ * @dev Factory contract for creating ERC-4337 smart accounts for Eco Touch users
  * @notice Creates and manages user smart accounts with gasless transactions
  */
 contract AccountFactory is Ownable {

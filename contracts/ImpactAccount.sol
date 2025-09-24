@@ -9,7 +9,7 @@ import "@openzeppelin/contracts/proxy/utils/UUPSUpgradeable.sol";
 
 /**
  * @title Impact Account (ERC-4337)
- * @dev Smart account implementation for Impact Autopilot users
+ * @dev Smart account implementation for Eco Touch users
  * @notice ERC-4337 compatible account with social recovery and multi-sig features
  */
 contract ImpactAccount is BaseAccount, Initializable, UUPSUpgradeable {
