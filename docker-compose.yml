@@ -1,0 +1,148 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: impact-autopilot-postgres
+    environment:
+      POSTGRES_DB: impact_autopilot
+      POSTGRES_USER: impact_user
+      POSTGRES_PASSWORD: impact_password
+      POSTGRES_ROOT_PASSWORD: root_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - impact-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U impact_user -d impact_autopilot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis Cache & Queue
+  redis:
+    image: redis:7-alpine
+    container_name: impact-autopilot-redis
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - impact-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Backend API Server
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: impact-autopilot-backend
+    environment:
+      NODE_ENV: development
+      PORT: 3001
+      DATABASE_URL: postgresql://impact_user:impact_password@postgres:5432/impact_autopilot
+      REDIS_URL: redis://redis:6379
+      JWT_SECRET: your-super-secret-jwt-key-change-in-production
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
+      TELEGRAM_WEBAPP_URL: ${TELEGRAM_WEBAPP_URL}
+      CLOVERLY_API_KEY: ${CLOVERLY_API_KEY}
+      ONE_CLICK_IMPACT_API_KEY: ${ONE_CLICK_IMPACT_API_KEY}
+      NATION_BUILDER_API_KEY: ${NATION_BUILDER_API_KEY}
+      KRA_API_KEY: ${KRA_API_KEY}
+      KRA_API_SECRET: ${KRA_API_SECRET}
+      POLYGON_RPC_URL: ${POLYGON_RPC_URL}
+      PRIVATE_KEY: ${PRIVATE_KEY}
+      ACCOUNT_FACTORY_ADDRESS: ${ACCOUNT_FACTORY_ADDRESS}
+      IMPACT_BADGE_SBT_ADDRESS: ${IMPACT_BADGE_SBT_ADDRESS}
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - impact-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Frontend React App (Development mode)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: impact-autopilot-frontend
+    environment:
+      REACT_APP_API_URL: http://backend:3001/api
+      REACT_APP_POLYGON_RPC_URL: ${REACT_APP_POLYGON_RPC_URL}
+      REACT_APP_WALLETCONNECT_PROJECT_ID: ${REACT_APP_WALLETCONNECT_PROJECT_ID}
+      REACT_APP_ACCOUNT_FACTORY_ADDRESS: ${REACT_APP_ACCOUNT_FACTORY_ADDRESS}
+      REACT_APP_IMPACT_BADGE_SBT_ADDRESS: ${REACT_APP_IMPACT_BADGE_SBT_ADDRESS}
+      CHOKIDAR_USEPOLLING: true
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+    networks:
+      - impact-network
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+
+  # Monitoring (Optional)
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: impact-autopilot-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    networks:
+      - impact-network
+    restart: unless-stopped
+    profiles:
+      - monitoring
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: impact-autopilot-grafana
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: admin
+    ports:
+      - "3002:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+    networks:
+      - impact-network
+    restart: unless-stopped
+    profiles:
+      - monitoring
+
+volumes:
+  postgres_data:
+  redis_data:
+  prometheus_data:
+  grafana_data:
+
+networks:
+  impact-network:
+    driver: bridge

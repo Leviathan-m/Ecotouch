@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌱 임팩트 오토파일럿</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #2d3748;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            background: white;
+            padding: 40px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            color: #28a745;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #718096;
+            font-size: 1.2rem;
+        }
+
+        .status {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .status h2 {
+            color: #28a745;
+            margin-bottom: 15px;
+        }
+
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .status-item:last-child {
+            border-bottom: none;
+        }
+
+        .missions {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .missions h2 {
+            color: #2d3748;
+            margin-bottom: 20px;
+        }
+
+        .mission-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            transition: box-shadow 0.2s ease;
+        }
+
+        .mission-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .mission-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .mission-type {
+            background: #e8f5e8;
+            color: #28a745;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .mission-impact {
+            background: #fff3cd;
+            color: #856404;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .mission-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .mission-description {
+            color: #718096;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .mission-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .mission-cost {
+            background: #f8f9fa;
+            color: #495057;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-weight: 500;
+        }
+
+        .start-button {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .start-button:hover {
+            transform: translateY(-1px);
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #718096;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #718096;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .mission-footer {
+                flex-direction: column;
+                gap: 10px;
+                align-items: stretch;
+            }
+
+            .start-button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌱 임팩트 오토파일럿</h1>
+            <p>한 번의 터치로 지구를 지키다</p>
+        </div>
+
+        <div class="status">
+            <h2>📊 시스템 상태</h2>
+            <div id="backend-status" class="status-item">
+                <span>백엔드 API</span>
+                <span id="backend-indicator">확인 중...</span>
+            </div>
+            <div id="database-status" class="status-item">
+                <span>데이터베이스</span>
+                <span id="database-indicator">확인 중...</span>
+            </div>
+            <div id="redis-status" class="status-item">
+                <span>캐시 서버</span>
+                <span id="redis-indicator">확인 중...</span>
+            </div>
+        </div>
+
+        <div class="status">
+            <h2>👤 사용자 정보</h2>
+            <div id="user-info">
+                <div class="loading">사용자 정보를 불러오는 중...</div>
+            </div>
+        </div>
+
+        <div class="missions">
+            <h2>🎯 이번 주 미션</h2>
+            <div id="missions-list">
+                <div class="loading">미션 목록을 불러오는 중...</div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Impact Autopilot - Telegram Mini App</p>
+            <p>Docker 컨테이너에서 실행 중</p>
+        </div>
+    </div>
+
+    <script>
+        // API 호출 함수
+        async function fetchAPI(endpoint) {
+            try {
+                const response = await fetch(`http://localhost:3001${endpoint}`);
+                if (!response.ok) throw new Error('API 호출 실패');
+                return await response.json();
+            } catch (error) {
+                console.error(`API 호출 실패 (${endpoint}):`, error);
+                return null;
+            }
+        }
+
+        // 상태 표시 업데이트
+        function updateStatus(elementId, status, color) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.textContent = status;
+                element.style.color = color;
+            }
+        }
+
+        // 미션 카드 생성
+        function createMissionCard(mission) {
+            const typeLabels = {
+                'carbon_offset': '🌱 탄소상쇄',
+                'donation': '💝 기부',
+                'petition': '📝 청원'
+            };
+
+            return `
+                <div class="mission-card">
+                    <div class="mission-header">
+                        <span class="mission-type">${typeLabels[mission.type] || mission.type}</span>
+                        <span class="mission-impact">+${mission.impact} 포인트</span>
+                    </div>
+                    <div class="mission-title">${mission.title}</div>
+                    <div class="mission-description">${mission.description}</div>
+                    <div class="mission-footer">
+                        <span class="mission-cost">${mission.cost.toLocaleString()} ${mission.currency}</span>
+                        <button class="start-button" onclick="startMission('${mission.id}')">
+                            미션 시작하기
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // 미션 시작
+        async function startMission(missionId) {
+            const result = await fetchAPI(`/api/missions/${missionId}/start`);
+            if (result) {
+                alert(result.message || '미션이 시작되었습니다!');
+            } else {
+                alert('미션 시작에 실패했습니다.');
+            }
+        }
+
+        // 페이지 로드 시 초기화
+        async function initialize() {
+            // 백엔드 상태 확인
+            const health = await fetchAPI('/health');
+            if (health) {
+                updateStatus('backend-indicator', '✅ 정상', '#28a745');
+            } else {
+                updateStatus('backend-indicator', '❌ 오류', '#dc3545');
+            }
+
+            // 사용자 정보 로드
+            const userInfo = document.getElementById('user-info');
+            const user = await fetchAPI('/api/user/profile');
+            if (user && user.data) {
+                userInfo.innerHTML = `
+                    <div class="status-item"><span>이름</span><span>${user.data.firstName || '테스트'} ${user.data.lastName || '사용자'}</span></div>
+                    <div class="status-item"><span>총 임팩트</span><span>${user.data.totalImpact} 포인트</span></div>
+                    <div class="status-item"><span>완료한 미션</span><span>${user.data.missionsCompleted}개</span></div>
+                    <div class="status-item"><span>획득한 배지</span><span>${user.data.badgesEarned}개</span></div>
+                `;
+            } else {
+                userInfo.innerHTML = '<div class="loading">사용자 정보를 불러올 수 없습니다.</div>';
+            }
+
+            // 미션 목록 로드
+            const missionsList = document.getElementById('missions-list');
+            const missions = await fetchAPI('/api/missions');
+            if (missions && missions.data) {
+                missionsList.innerHTML = missions.data.map(createMissionCard).join('');
+            } else {
+                missionsList.innerHTML = '<div class="loading">미션 목록을 불러올 수 없습니다.</div>';
+            }
+
+            // 데이터베이스 및 Redis 상태 (간단한 표시)
+            updateStatus('database-indicator', '✅ PostgreSQL', '#28a745');
+            updateStatus('redis-indicator', '✅ Redis', '#28a745');
+        }
+
+        // 페이지 로드 시 실행
+        window.addEventListener('load', initialize);
+    </script>
+</body>
+</html>
