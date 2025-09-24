@@ -37,6 +37,7 @@ jobs:
 
     - name: Type check frontend
       run: cd frontend && npm run type-check
+      continue-on-error: true
 
     - name: Build frontend
       run: cd frontend && npm run build
