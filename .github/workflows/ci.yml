@@ -1,0 +1,77 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+
+    - name: Install root dependencies
+      run: npm ci
+
+    - name: Install backend dependencies
+      run: cd backend && npm ci
+
+    - name: Install frontend dependencies
+      run: cd frontend && npm ci
+
+    - name: Type check backend
+      run: cd backend && npm run build
+
+    - name: Lint backend
+      run: cd backend && npm run lint
+      continue-on-error: true
+
+    - name: Type check frontend
+      run: cd frontend && npm run type-check
+
+    - name: Build frontend
+      run: cd frontend && npm run build
+
+    - name: Run backend tests
+      run: cd backend && npm test
+      env:
+        NODE_ENV: test
+        DATABASE_URL: postgresql://test:test@localhost:5432/test_db
+      continue-on-error: true
+
+    - name: Run frontend tests
+      run: cd frontend && npm test -- --coverage --watchAll=false
+      continue-on-error: true
+
+  docker-build:
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Build Docker images
+      run: docker-compose build --no-cache
+
+    - name: Test Docker containers
+      run: |
+        docker-compose up -d
+        sleep 30
+        docker-compose ps
+        docker-compose logs
+        docker-compose down

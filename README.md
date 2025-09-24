@@ -5,6 +5,7 @@
 텔레그램 미니앱 기반의 글로벌 사회적 임팩트 플랫폼입니다. 사용자가 주간 미션(탄소상쇄, 소액기부, 청원 서명)을 선택하고 승인하면 플랫폼이 자동으로 실행하며, 실시간으로 작업 로그·증빙·영향 메트릭을 시각화하고 완료 시 SBT "임팩트 배지"를 발급합니다.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Node.js CI](https://github.com/your-org/impact-autopilot/actions/workflows/ci.yml/badge.svg)](https://github.com/your-org/impact-autopilot/actions)
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-20232A?logo=react&logoColor=61DAFB)](https://reactjs.org/)
 [![Node.js](https://img.shields.io/badge/Node.js-339933?logo=nodedotjs&logoColor=white)](https://nodejs.org/)
@@ -81,9 +82,11 @@
 
 3. **환경 변수 설정**
    ```bash
-   cp .env.template .env
-   # .env 파일을 열어 필요한 API 키와 설정을 입력하세요
+   cp docs/ENVIRONMENT_SETUP.md .env
+   # docs/ENVIRONMENT_SETUP.md 파일을 참고하여 .env 파일을 설정하세요
    ```
+
+   📖 [환경 변수 설정 가이드](docs/ENVIRONMENT_SETUP.md)를 참조하세요.
 
 4. **데이터베이스 설정**
    ```bash
@@ -286,11 +289,57 @@ npm run deploy
 
 ## 🤝 기여하기
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+프로젝트에 관심을 가져주셔서 감사합니다! 기여를 원하신다면 다음 단계를 따라주세요:
+
+### 개발 환경 설정
+
+1. **레포지토리 클론**
+   ```bash
+   git clone https://github.com/your-org/impact-autopilot.git
+   cd impact-autopilot
+   ```
+
+2. **개발 환경 준비**
+   ```bash
+   npm run install:all
+   # 환경 변수 설정 (docs/ENVIRONMENT_SETUP.md 참고)
+   ```
+
+3. **개발 서버 실행**
+   ```bash
+   npm run dev
+   ```
+
+### 기여 절차
+
+1. **Fork the repository**
+2. **브랜치 생성**: `git checkout -b feature/your-feature-name`
+3. **코드 변경 및 테스트**
+4. **커밋**: `git commit -m 'feat: add amazing feature'`
+5. **푸시**: `git push origin feature/your-feature-name`
+6. **Pull Request 생성**
+
+### 커밋 메시지 규칙
+
+- `feat:` 새로운 기능 추가
+- `fix:` 버그 수정
+- `docs:` 문서 변경
+- `style:` 코드 스타일 변경 (기능 변경 없음)
+- `refactor:` 코드 리팩토링
+- `test:` 테스트 추가/수정
+- `chore:` 빌드, 설정 등 기타 변경
+
+### 코드 품질
+
+- TypeScript 엄격 모드 준수
+- ESLint 규칙 준수
+- 테스트 커버리지 유지
+- PR 전에 모든 테스트 통과 확인
+
+### 질문이 있으신가요?
+
+- 💬 [GitHub Discussions](https://github.com/your-org/impact-autopilot/discussions)
+- 📧 [이메일 문의](mailto:contact@impactautopilot.com)
 
 ## 📝 라이선스
 
