@@ -1,4 +1,4 @@
-# 🌱 임팩트 오토파일럿 (Impact Autopilot)
+# 🌱 에코터치 (Eco Touch)
 
 *"한 번의 터치로 지구를 지키다"*
 
@@ -339,7 +339,7 @@ npm run deploy
 ### 질문이 있으신가요?
 
 - 💬 [GitHub Discussions](https://github.com/Leviathan-m/Ecotouch/discussions)
-- 📧 [이메일 문의](mailto:contact@impactautopilot.com)
+- 📧 [이메일 문의](mailto:mahzzangg@gmail.com)
 
 ## 📝 라이선스
 
@@ -347,10 +347,9 @@ npm run deploy
 
 ## 📞 연락처
 
-- **프로젝트 리드**: [Your Name]
-- **이메일**: contact@impactautopilot.com
-- **텔레그램**: [@impactautopilot]
-- **웹사이트**: [https://impactautopilot.com](https://impactautopilot.com)
+- **프로젝트 리드**: Ryan Park
+- **이메일**: mahzzangg@gmail.com
+- **텔레그램**: [@EcotouchBot]
 
 ## 🙏 감사의 말
 
