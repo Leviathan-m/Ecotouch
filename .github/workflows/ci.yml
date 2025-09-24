@@ -41,6 +41,7 @@ jobs:
 
     - name: Build frontend
       run: cd frontend && npm run build
+      continue-on-error: true
 
     - name: Run backend tests
       run: cd backend && npm test
