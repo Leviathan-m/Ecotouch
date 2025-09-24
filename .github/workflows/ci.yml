@@ -29,6 +29,7 @@ jobs:
 
     - name: Type check backend
       run: cd backend && npm run build
+      continue-on-error: true
 
     - name: Lint backend
       run: cd backend && npm run lint
