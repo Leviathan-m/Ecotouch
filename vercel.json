@@ -21,7 +21,8 @@
     }
   ],
   "env": {
-    "NODE_ENV": "production"
+    "NODE_ENV": "production",
+    "REACT_APP_DEMO_MODE": "true"
   },
   "functions": {
     "api/**/*.js": {

@@ -61,6 +61,9 @@ JWT_SECRET=your-production-jwt-secret-here
 JWT_REFRESH_SECRET=your-production-jwt-refresh-secret-here
 CORS_ORIGIN=https://your-production-domain.com
 
+# Demo mode (set to 'true' to bypass Telegram authentication for testing)
+DEMO_MODE=false
+
 # =============================================================================
 # PRODUCTION MONITORING
 # =============================================================================

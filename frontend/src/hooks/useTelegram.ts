@@ -45,7 +45,17 @@ export const useTelegram = () => {
         };
       } else {
         // Fallback for development without Telegram WebApp
-        console.warn('Telegram WebApp not available, using mock data');
+        // Create mock user for testing without login
+        console.log('Telegram WebApp not available, using mock user for demo mode');
+        const mockUser: TelegramUser = {
+          id: 123456789,
+          first_name: 'Demo',
+          last_name: 'User',
+          username: 'demo_user',
+          language_code: 'ko'
+        };
+
+        setUser(mockUser);
         setIsReady(true);
       }
     };

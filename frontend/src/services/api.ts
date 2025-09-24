@@ -19,9 +19,14 @@ class ApiService {
     // Request interceptor
     this.api.interceptors.request.use(
       (config) => {
-        // Add Telegram init data to headers
-        if (window.Telegram?.WebApp?.initData) {
-          config.headers.Authorization = `Bearer ${window.Telegram.WebApp.initData}`;
+        // Skip authentication in demo mode
+        const isDemoMode = process.env.REACT_APP_DEMO_MODE === 'true';
+
+        if (!isDemoMode) {
+          // Add Telegram init data to headers
+          if (window.Telegram?.WebApp?.initData) {
+            config.headers.Authorization = `Bearer ${window.Telegram.WebApp.initData}`;
+          }
         }
 
         // Add timestamp for cache busting

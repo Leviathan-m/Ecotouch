@@ -34,6 +34,35 @@ export const telegramAuth = async (
   next: NextFunction
 ) => {
   try {
+    // Skip authentication in demo mode
+    if (process.env.DEMO_MODE === 'true') {
+      // Create mock user for demo
+      req.telegramUser = {
+        id: 123456789,
+        first_name: 'Demo',
+        last_name: 'User',
+        username: 'demo_user',
+        language_code: 'ko'
+      };
+      req.user = {
+        id: 'demo-user',
+        telegramId: 123456789,
+        firstName: 'Demo',
+        lastName: 'User',
+        username: 'demo_user',
+        languageCode: 'ko',
+        walletAddress: null,
+        isPremium: false,
+        totalImpact: 100,
+        missionsCompleted: 5,
+        badgesEarned: 2,
+        lastActiveAt: new Date(),
+        createdAt: new Date(),
+        updatedAt: new Date()
+      };
+      return next();
+    }
+
     const authHeader = req.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
