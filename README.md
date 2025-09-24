@@ -5,7 +5,7 @@
 텔레그램 미니앱 기반의 글로벌 사회적 임팩트 플랫폼입니다. 사용자가 주간 미션(탄소상쇄, 소액기부, 청원 서명)을 선택하고 승인하면 플랫폼이 자동으로 실행하며, 실시간으로 작업 로그·증빙·영향 메트릭을 시각화하고 완료 시 SBT "임팩트 배지"를 발급합니다.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Node.js CI](https://github.com/your-org/impact-autopilot/actions/workflows/ci.yml/badge.svg)](https://github.com/your-org/impact-autopilot/actions)
+[![Node.js CI](https://github.com/Leviathan-m/impact-autopilot/actions/workflows/ci.yml/badge.svg)](https://github.com/Leviathan-m/impact-autopilot/actions)
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-20232A?logo=react&logoColor=61DAFB)](https://reactjs.org/)
 [![Node.js](https://img.shields.io/badge/Node.js-339933?logo=nodedotjs&logoColor=white)](https://nodejs.org/)
@@ -71,7 +71,7 @@
 
 1. **레포지토리 클론**
    ```bash
-   git clone https://github.com/your-org/impact-autopilot.git
+   git clone https://github.com/Leviathan-m/impact-autopilot.git
    cd impact-autopilot
    ```
 
@@ -295,7 +295,7 @@ npm run deploy
 
 1. **레포지토리 클론**
    ```bash
-   git clone https://github.com/your-org/impact-autopilot.git
+   git clone https://github.com/Leviathan-m/impact-autopilot.git
    cd impact-autopilot
    ```
 
@@ -338,7 +338,7 @@ npm run deploy
 
 ### 질문이 있으신가요?
 
-- 💬 [GitHub Discussions](https://github.com/your-org/impact-autopilot/discussions)
+- 💬 [GitHub Discussions](https://github.com/Leviathan-m/impact-autopilot/discussions)
 - 📧 [이메일 문의](mailto:contact@impactautopilot.com)
 
 ## 📝 라이선스
