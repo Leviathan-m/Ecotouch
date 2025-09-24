@@ -1,7 +1,7 @@
 {
-  "name": "impact-autopilot-backend",
+  "name": "ecotouch-backend",
   "version": "1.0.0",
-  "description": "Backend API for Impact Autopilot platform",
+  "description": "Backend API for Ecotouch platform",
   "main": "dist/server.js",
   "scripts": {
     "build": "tsc",

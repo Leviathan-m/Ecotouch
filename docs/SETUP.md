@@ -1,6 +1,6 @@
-# 🚀 Impact Autopilot - 설정 가이드
+# 🚀 Ecotouch - 설정 가이드
 
-이 가이드는 Impact Autopilot 프로젝트를 로컬 환경에서 설정하고 실행하는 방법을 설명합니다.
+이 가이드는 Ecotouch 프로젝트를 로컬 환경에서 설정하고 실행하는 방법을 설명합니다.
 
 ## 📋 사전 요구사항
 
@@ -43,7 +43,7 @@ sudo systemctl start redis-server
 
 ### 1. 프로젝트 클론 및 의존성 설치
 ```bash
-git clone https://github.com/your-org/impact-autopilot.git
+git clone https://github.com/Leviathan-m/Ecotouch.git
 cd impact-autopilot
 npm install --legacy-peer-deps
 ```
@@ -248,9 +248,9 @@ docker-compose logs frontend
 
 문제가 발생하거나 도움이 필요하시면:
 
-1. [Issues](https://github.com/your-org/impact-autopilot/issues)에서 검색
+1. [Issues](https://github.com/Leviathan-m/Ecotouch/issues)에서 검색
 2. 새로운 Issue 생성
-3. [Discussions](https://github.com/your-org/impact-autopilot/discussions) 사용
+3. [Discussions](https://github.com/Leviathan-m/Ecotouch/discussions) 사용
 
 ---
 

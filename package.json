@@ -1,7 +1,7 @@
 {
-  "name": "impact-autopilot",
+  "name": "ecotouch",
   "version": "1.0.0",
-  "description": "Impact Autopilot - One-touch platform for global social impact",
+  "description": "Ecotouch - One-touch platform for global social impact",
   "private": true,
   "workspaces": [
     "frontend",
