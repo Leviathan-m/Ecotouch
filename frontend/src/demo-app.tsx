@@ -142,7 +142,7 @@ const DemoApp: React.FC = () => {
 
     // Simulate API call
     setTimeout(() => {
-      setMissions((prev: typeof mockMissions) => prev.map(mission =>
+      setMissions((prev: any) => prev.map((mission: any) =>
         mission.id === missionId
           ? { ...mission, status: 'processing' as const }
           : mission
@@ -158,7 +158,7 @@ const DemoApp: React.FC = () => {
 
     // Simulate API call
     setTimeout(() => {
-      setMissions((prev: typeof mockMissions) => prev.map(mission =>
+      setMissions((prev: any) => prev.map((mission: any) =>
         mission.id === missionId
           ? { ...mission, status: 'completed' as const }
           : mission

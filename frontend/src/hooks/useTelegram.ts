@@ -80,31 +80,6 @@ export const useTelegram = () => {
           viewportStableHeight: window.innerHeight,
           headerColor: '#28A745',
           backgroundColor: '#ffffff',
-          BackButton: {
-            show: () => {},
-            hide: () => {},
-            onClick: () => {}
-          },
-          MainButton: {
-            text: 'Demo Button',
-            color: '#28A745',
-            textColor: '#ffffff',
-            isVisible: false,
-            isActive: true,
-            show: () => {},
-            hide: () => {},
-            enable: () => {},
-            disable: () => {},
-            onClick: () => {},
-            setText: () => {},
-            showProgress: () => {},
-            hideProgress: () => {}
-          },
-          HapticFeedback: {
-            impactOccurred: () => {},
-            notificationOccurred: () => {},
-            selectionChanged: () => {}
-          },
           expand: () => {},
           close: () => {},
           sendData: () => {},
@@ -125,7 +100,7 @@ export const useTelegram = () => {
           onEvent: () => {},
           offEvent: () => {},
           sendEvent: () => {}
-        };
+        } as any;
 
         setWebApp(mockWebApp);
       }

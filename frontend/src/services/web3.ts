@@ -206,7 +206,7 @@ export class Web3Service {
     try {
       if (!window.ethereum) return false;
 
-      await window.ethereum.request({
+      await (window.ethereum as any).request({
         method: 'wallet_switchEthereumChain',
         params: [{ chainId: `0x${polygon.id.toString(16)}` }],
       });
@@ -215,7 +215,7 @@ export class Web3Service {
       // This error code indicates that the chain has not been added to MetaMask
       if (switchError.code === 4902) {
         try {
-          await window.ethereum.request({
+          await (window.ethereum as any).request({
             method: 'wallet_addEthereumChain',
             params: [{
               chainId: `0x${polygon.id.toString(16)}`,
@@ -447,6 +447,6 @@ export { wagmiConfig };
 // Type definitions
 declare global {
   interface Window {
-    ethereum?: any;
+    ethereum?: Record<string, unknown>;
   }
 }
