@@ -16,14 +16,16 @@ export const useTelegram = () => {
 
   useEffect(() => {
     const initTelegram = () => {
-      if (window.Telegram?.WebApp) {
+      const isDemoMode = process.env.REACT_APP_DEMO_MODE === 'true';
+
+      if (window.Telegram?.WebApp && !isDemoMode) {
         const tgWebApp = window.Telegram.WebApp;
 
         // Expand the WebApp to full height
         tgWebApp.expand();
 
         // Set theme colors
-        tgWebApp.setHeaderColor('#28A745'); // Green theme
+        tgWebApp.setHeaderColor('#28A745'); // Eco Touch green theme
         tgWebApp.setBackgroundColor('#ffffff');
 
         // Enable closing confirmation
@@ -44,9 +46,9 @@ export const useTelegram = () => {
           tgWebApp.offEvent('themeChanged', handleThemeChange);
         };
       } else {
-        // Fallback for development without Telegram WebApp
-        // Create mock user for testing without login
-        console.log('Telegram WebApp not available, using mock user for demo mode');
+        // Demo mode or development without Telegram WebApp
+        console.log('🧪 Demo mode activated - bypassing Telegram authentication');
+
         const mockUser: TelegramUser = {
           id: 123456789,
           first_name: 'Demo',
@@ -57,6 +59,75 @@ export const useTelegram = () => {
 
         setUser(mockUser);
         setIsReady(true);
+
+        // Mock webApp for demo functionality
+        const mockWebApp: TelegramWebApp = {
+          initData: '',
+          initDataUnsafe: { user: mockUser },
+          version: '6.0',
+          platform: 'demo',
+          colorScheme: 'light',
+          themeParams: {
+            bg_color: '#ffffff',
+            text_color: '#000000',
+            hint_color: '#999999',
+            link_color: '#28A745',
+            button_color: '#28A745',
+            button_text_color: '#ffffff'
+          },
+          isExpanded: true,
+          viewportHeight: window.innerHeight,
+          viewportStableHeight: window.innerHeight,
+          headerColor: '#28A745',
+          backgroundColor: '#ffffff',
+          BackButton: {
+            show: () => {},
+            hide: () => {},
+            onClick: () => {}
+          },
+          MainButton: {
+            text: 'Demo Button',
+            color: '#28A745',
+            textColor: '#ffffff',
+            isVisible: false,
+            isActive: true,
+            show: () => {},
+            hide: () => {},
+            enable: () => {},
+            disable: () => {},
+            onClick: () => {},
+            setText: () => {},
+            showProgress: () => {},
+            hideProgress: () => {}
+          },
+          HapticFeedback: {
+            impactOccurred: () => {},
+            notificationOccurred: () => {},
+            selectionChanged: () => {}
+          },
+          expand: () => {},
+          close: () => {},
+          sendData: () => {},
+          openLink: () => {},
+          openTelegramLink: () => {},
+          showAlert: () => {},
+          showConfirm: () => {},
+          showScanQrPopup: () => {},
+          closeScanQrPopup: () => {},
+          readTextFromClipboard: () => Promise.resolve(''),
+          requestWriteAccess: () => Promise.resolve(false),
+          requestContact: () => Promise.resolve(null),
+          ready: () => {},
+          setHeaderColor: () => {},
+          setBackgroundColor: () => {},
+          enableClosingConfirmation: () => {},
+          disableClosingConfirmation: () => {},
+          onEvent: () => {},
+          offEvent: () => {},
+          sendEvent: () => {}
+        };
+
+        setWebApp(mockWebApp);
       }
     };
 

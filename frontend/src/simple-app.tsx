@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './simple-app.css';
+import { DemoModeToggle } from './components/DemoModeToggle';
 
 const SimpleApp: React.FC = () => {
   const [missions, setMissions] = useState<any[]>([]);
@@ -64,6 +65,7 @@ const SimpleApp: React.FC = () => {
 
   return (
     <div className="app">
+      <DemoModeToggle />
       <header className="header">
         <h1>🌱 Eco Touch</h1>
         <p>한 번의 터치로 지구를 지키다</p>
