@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌱 Eco Touch - 데모</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+        }
+
+        .header h1 {
+            color: #2d3748;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #718096;
+            font-size: 18px;
+        }
+
+        .demo-notice {
+            background: linear-gradient(45deg, #28A745, #20C997);
+            color: white;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .tab-button {
+            background: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .tab-button.active {
+            background: #28A745;
+            color: white;
+        }
+
+        .tab-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .stat-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .stat-icon.impact { background: #28A745; }
+        .stat-icon.missions { background: #007BFF; }
+        .stat-icon.progress { background: #FFC107; }
+        .stat-icon.next { background: #DC3545; }
+
+        .stat-content h3 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 4px;
+        }
+
+        .stat-content p {
+            color: #718096;
+            font-size: 14px;
+        }
+
+        .missions-grid, .badges-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .mission-card, .badge-card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .mission-card:hover, .badge-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .mission-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .mission-type {
+            background: #f0f9ff;
+            color: #007BFF;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .mission-impact {
+            color: #28A745;
+            font-weight: 600;
+        }
+
+        .mission-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 8px;
+        }
+
+        .mission-description {
+            color: #718096;
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        .mission-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .mission-cost {
+            color: #a0aec0;
+        }
+
+        .btn {
+            background: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #0056b3;
+        }
+
+        .btn.success { background: #28A745; }
+        .btn.danger { background: #DC3545; }
+
+        .badge-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            position: relative;
+        }
+
+        .badge-icon.carbon { background: linear-gradient(145deg, #28A745, #20C997); }
+        .badge-icon.donation { background: linear-gradient(145deg, #DC3545, #C82333); }
+        .badge-icon.petition { background: linear-gradient(145deg, #6F42C1, #5A32A3); }
+
+        .badge-level {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .badge-title {
+            text-align: center;
+            font-size: 16px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 8px;
+        }
+
+        .badge-impact {
+            text-align: center;
+            color: #718096;
+            margin-bottom: 12px;
+        }
+
+        .badge-date {
+            text-align: center;
+            font-size: 12px;
+            color: #a0aec0;
+        }
+
+        .new-badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: linear-gradient(45deg, #FF6B6B, #DC3545);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 800;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .missions-grid, .badges-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tabs {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="demo-notice">
+            🎯 데모 모드 활성화됨 - 실제 Telegram 앱 없이도 모든 기능을 테스트할 수 있습니다!
+        </div>
+
+        <div class="header">
+            <h1>🌱 Eco Touch</h1>
+            <p>한 번의 터치로 지구를 지키다</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-button active" onclick="showTab('dashboard')">📊 대시보드</button>
+            <button class="tab-button" onclick="showTab('missions')">🎯 미션</button>
+            <button class="tab-button" onclick="showTab('badges')">🏆 배지</button>
+        </div>
+
+        <!-- 대시보드 탭 -->
+        <div id="dashboard" class="tab-content active">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon impact">🌱</div>
+                    <div class="stat-content">
+                        <h3>175</h3>
+                        <p>총 임팩트 점수</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon missions">🎯</div>
+                    <div class="stat-content">
+                        <h3>8</h3>
+                        <p>완료한 미션</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon progress">📈</div>
+                    <div class="stat-content">
+                        <h3>70%</h3>
+                        <p>주간 목표 달성</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon next">🎯</div>
+                    <div class="stat-content">
+                        <h3>25</h3>
+                        <p>다음 마일스톤</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 미션 탭 -->
+        <div id="missions" class="tab-content">
+            <div class="missions-grid">
+                <div class="mission-card">
+                    <div class="mission-header">
+                        <span class="mission-type">🌱 탄소상쇄</span>
+                        <span class="mission-impact">+25 포인트</span>
+                    </div>
+                    <h3 class="mission-title">탄소 발자국 줄이기 챌린지</h3>
+                    <p class="mission-description">일주일 동안 대중교통 이용하고 탄소 배출량을 20kg 줄여보세요</p>
+                    <div class="mission-footer">
+                        <span class="mission-cost">무료</span>
+                        <button class="btn" onclick="startMission('탄소상쇄 챌린지')">🚀 시작하기</button>
+                    </div>
+                </div>
+
+                <div class="mission-card">
+                    <div class="mission-header">
+                        <span class="mission-type">💝 기부</span>
+                        <span class="mission-impact">+50 포인트</span>
+                    </div>
+                    <h3 class="mission-title">환경 기부 챌린지</h3>
+                    <p class="mission-description">환경 단체에 10,000원 기부하고 기부 영수증을 공유하세요</p>
+                    <div class="mission-footer">
+                        <span class="mission-cost">10,000원</span>
+                        <button class="btn" onclick="startMission('환경 기부 챌린지')">🚀 시작하기</button>
+                    </div>
+                </div>
+
+                <div class="mission-card">
+                    <div class="mission-header">
+                        <span class="mission-type">📝 청원</span>
+                        <span class="mission-impact">+30 포인트</span>
+                    </div>
+                    <h3 class="mission-title">청원 참여 챌린지</h3>
+                    <p class="mission-description">환경 보호 관련 청원에 서명하고 5명의 친구를 초대하세요</p>
+                    <div class="mission-footer">
+                        <span class="mission-cost">무료</span>
+                        <button class="btn" onclick="startMission('청원 참여 챌린지')">🚀 시작하기</button>
+                    </div>
+                </div>
+
+                <div class="mission-card">
+                    <div class="mission-header">
+                        <span class="mission-type">🌱 탄소상쇄</span>
+                        <span class="mission-impact">+40 포인트</span>
+                    </div>
+                    <h3 class="mission-title">제로 웨이스트 챌린지</h3>
+                    <p class="mission-description">일주일 동안 일회용품을 사용하지 않고 생활해보세요</p>
+                    <div class="mission-footer">
+                        <span class="mission-cost">무료</span>
+                        <button class="btn success" onclick="completeMission('제로 웨이스트 챌린지')">✅ 완료됨</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 배지 탭 -->
+        <div id="badges" class="tab-content">
+            <div class="badges-grid">
+                <div class="badge-card">
+                    <div class="badge-icon carbon">
+                        🌱
+                        <div class="badge-level">BRONZE</div>
+                    </div>
+                    <h3 class="badge-title">탄소상쇄 배지</h3>
+                    <p class="badge-impact">25 임팩트 포인트</p>
+                    <p class="badge-date">획득일: 2024.09.01</p>
+                </div>
+
+                <div class="badge-card">
+                    <div class="badge-icon donation">
+                        💝
+                        <div class="badge-level">SILVER</div>
+                    </div>
+                    <h3 class="badge-title">기부 배지</h3>
+                    <p class="badge-impact">50 임팩트 포인트</p>
+                    <p class="badge-date">획득일: 2024.09.15</p>
+                </div>
+
+                <div class="badge-card">
+                    <div class="badge-icon petition">
+                        📝
+                        <div class="badge-level">GOLD</div>
+                    </div>
+                    <h3 class="badge-title">청원 배지</h3>
+                    <p class="badge-impact">75 임팩트 포인트</p>
+                    <p class="badge-date">획득일: 2024.09.20</p>
+                </div>
+
+                <div class="badge-card">
+                    <div class="badge-icon carbon">
+                        🌱
+                        <div class="badge-level">PLATINUM</div>
+                        <div class="new-badge">✨ NEW</div>
+                    </div>
+                    <h3 class="badge-title">탄소상쇄 배지</h3>
+                    <p class="badge-impact">100 임팩트 포인트</p>
+                    <p class="badge-date">획득일: 2024.09.25</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            // 모든 탭 콘텐츠 숨기기
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            // 모든 탭 버튼 비활성화
+            const buttons = document.querySelectorAll('.tab-button');
+            buttons.forEach(button => button.classList.remove('active'));
+
+            // 선택된 탭 표시
+            document.getElementById(tabName).classList.add('active');
+
+            // 선택된 버튼 활성화
+            event.target.classList.add('active');
+        }
+
+        function startMission(missionName) {
+            alert(`🎯 ${missionName} 미션이 시작되었습니다!\n\n실제 앱에서는 Telegram 봇을 통해 미션이 진행됩니다.`);
+        }
+
+        function completeMission(missionName) {
+            alert(`✅ ${missionName} 미션이 완료되었습니다!\n\n축하합니다! 배지가 지급되었습니다.`);
+        }
+
+        // 데모 알림
+        setTimeout(() => {
+            alert('🎮 Eco Touch 데모 모드\n\n✅ 대시보드: 통계 및 진행률 확인\n✅ 미션: 다양한 환경 보호 활동\n✅ 배지: 성취도에 따른 특별 뱃지\n\n실제 앱에서는 Telegram을 통해 참여할 수 있습니다!');
+        }, 1000);
+    </script>
+</body>
+</html>

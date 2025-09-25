@@ -1,9 +1,8 @@
 import React from 'react';
-import SimpleApp from './simple-app';
-import './simple-app.css';
+import DemoApp from './demo-app';
 
 function App() {
-  return <SimpleApp />;
+  return <DemoApp />;
 }
 
 export default App;
