@@ -122,10 +122,28 @@ export const BadgeMedalSVG: React.FC<BadgeMedalSVGProps> = ({
             <stop key={i} offset={s.offset} stopColor={s.color} stopOpacity={s.opacity ?? 1} />
           ))}
         </linearGradient>
+        {/* Brushed metal texture */}
+        <filter id="brushedMetal" x="-50%" y="-50%" width="200%" height="200%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="2" result="noise" />
+          <feColorMatrix type="saturate" values="0" />
+          <feGaussianBlur stdDeviation="0.4" />
+          <feComponentTransfer>
+            <feFuncA type="table" tableValues="0 0.25" />
+          </feComponentTransfer>
+          <feBlend mode="overlay" in2="SourceGraphic" />
+        </filter>
         <filter id="innerShadow" x="-50%" y="-50%" width="200%" height="200%">
           <feOffset dx="0" dy="0" />
           <feGaussianBlur stdDeviation="1.5" result="blur" />
           <feComposite in="SourceGraphic" in2="blur" operator="arithmetic" k2="-1" k3="1" />
+        </filter>
+        {/* Specular highlight for glossy enamel */}
+        <filter id="specularGloss" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur in="SourceAlpha" stdDeviation="1" result="blur" />
+          <feSpecularLighting in="blur" surfaceScale="2" specularConstant="0.75" specularExponent="20" lightingColor="#ffffff" result="spec">
+            <fePointLight x={r - 20} y={r - 30} z="40" />
+          </feSpecularLighting>
+          <feComposite in="spec" in2="SourceAlpha" operator="in" />
         </filter>
         <radialGradient id="gloss" cx="30%" cy="25%" r="65%">
           <stop offset="0%" stopColor="#ffffff" stopOpacity="0.3" />
@@ -133,14 +151,18 @@ export const BadgeMedalSVG: React.FC<BadgeMedalSVGProps> = ({
         </radialGradient>
         <path id="topArcPath" d={topArc} />
         <path id="bottomArcPath" d={bottomArc} />
+        {/* Laurel leaf path (single), will mirror */}
+        <path id="laurelLeaf" d="M0,0 C4,-6 10,-8 16,-6 C10,-2 6,2 0,0 Z" />
       </defs>
 
       {/* Outer Medal Base */}
-      <circle cx={r} cy={r} r={ringR} fill="url(#metalGradient)" />
+      <circle cx={r} cy={r} r={ringR} fill="url(#metalGradient)" filter="url(#brushedMetal)" />
       {/* Gloss */}
       <circle cx={r} cy={r} r={ringR} fill="url(#gloss)" />
       {/* Accent Ring */}
       <circle cx={r} cy={r} r={arcR + 6} fill="none" stroke={accent} strokeOpacity="0.25" strokeWidth="2" />
+      {/* Enamel inner ring */}
+      <circle cx={r} cy={r} r={arcR - 2} fill="none" stroke={accent} strokeWidth={level === 'platinum' ? 6 : level === 'gold' ? 5 : 4} opacity={0.6} />
 
       {/* Arc Texts */}
       <text fill="#ffffff" fontFamily="Inter, system-ui, -apple-system" fontWeight={600} fontSize={Math.max(10, Math.floor(size * 0.1))}>
@@ -199,6 +221,22 @@ export const BadgeMedalSVG: React.FC<BadgeMedalSVGProps> = ({
       <text x={r + arcR - 18} y={r - arcR + 14} fontSize={12} opacity={0.9}>🍃</text>
       <text x={r - arcR + 6} y={r + arcR - 6} fontSize={12} opacity={0.9}>🍃</text>
       <text x={r + arcR - 18} y={r + arcR - 6} fontSize={12} opacity={0.9}>🍃</text>
+
+      {/* Laurel wreath for gold/platinum */}
+      {(level === 'gold' || level === 'platinum') && (
+        <g transform={`translate(${r - arcR + 10}, ${r - 6}) rotate(-50)`} fill={level === 'platinum' ? '#E5E4E2' : '#FFD700'} opacity="0.6">
+          {Array.from({ length: 7 }).map((_, i) => (
+            <use key={`l${i}`} href="#laurelLeaf" x={i * 10} y={i * 2} />
+          ))}
+        </g>
+      )}
+      {(level === 'gold' || level === 'platinum') && (
+        <g transform={`translate(${r + arcR - 10}, ${r - 6}) rotate(230)`} fill={level === 'platinum' ? '#E5E4E2' : '#FFD700'} opacity="0.6">
+          {Array.from({ length: 7 }).map((_, i) => (
+            <use key={`lr${i}`} href="#laurelLeaf" x={i * 10} y={i * 2} />
+          ))}
+        </g>
+      )}
 
       {/* NEW indicator */}
       {isNew && (
