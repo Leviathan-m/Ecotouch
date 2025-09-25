@@ -21,8 +21,7 @@
   ],
   "env": {
     "NODE_ENV": "production",
-    "REACT_APP_DEMO_MODE": "false",
-    "REACT_APP_API_URL": "https://ecotouch-l189mxg5j-ryan-jm-parks-projects.vercel.app"
+    "REACT_APP_DEMO_MODE": "false"
   },
   "regions": ["icn1"]
 }
