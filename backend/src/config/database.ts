@@ -9,26 +9,27 @@ const isProduction = process.env.NODE_ENV === 'production';
 export const AppDataSource = new DataSource({
   type: 'postgres',
   url: process.env.DATABASE_URL,
-  ssl: isProduction ? { rejectUnauthorized: false } : false,
+  ssl: { rejectUnauthorized: false }, // Supabase requires this
   entities: [User, Mission, Transaction, Receipt],
   migrations: ['src/migrations/*.ts'],
   subscribers: ['src/subscribers/*.ts'],
   synchronize: !isProduction, // Don't use in production
   logging: !isProduction,
   dropSchema: false,
-  cache: {
-    type: 'redis',
-    options: {
-      host: process.env.REDIS_HOST || 'localhost',
-      port: parseInt(process.env.REDIS_PORT || '6379'),
-      password: process.env.REDIS_PASSWORD,
-    },
-    duration: 60000, // 1 minute
-  },
+  // Supabase doesn't support Redis cache, so disable it
+  // cache: {
+  //   type: 'redis',
+  //   options: {
+  //     host: process.env.REDIS_HOST || 'localhost',
+  //     port: parseInt(process.env.REDIS_PORT || '6379'),
+  //     password: process.env.REDIS_PASSWORD,
+  //   },
+  //   duration: 60000, // 1 minute
+  // },
   extra: {
-    // Connection pool settings
-    max: 20,
-    min: 2,
+    // Connection pool settings for Supabase
+    max: 10, // Supabase has connection limits
+    min: 1,
     idleTimeoutMillis: 30000,
     acquireTimeoutMillis: 60000,
   },
