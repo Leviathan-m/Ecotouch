@@ -9,16 +9,20 @@
       }
     }
   ],
-  "rewrites": [
+  "routes": [
     {
-      "source": "/((?!api/).*)",
-      "destination": "/index.html"
+      "src": "/api/(.*)",
+      "dest": "/api/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
     }
   ],
   "env": {
     "NODE_ENV": "production",
     "REACT_APP_DEMO_MODE": "false",
-    "REACT_APP_API_URL": "https://ecotouch-927n3pzab-ryan-jm-parks-projects.vercel.app"
+    "REACT_APP_API_URL": "https://ecotouch-l189mxg5j-ryan-jm-parks-projects.vercel.app"
   },
   "regions": ["icn1"]
 }
