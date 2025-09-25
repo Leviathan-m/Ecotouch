@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { MissionType } from '../types';
-import { Leaf, Heart, MessageSquare, Star, Trophy, Award, Shield, Zap, Target, Users } from 'lucide-react';
+import { Leaf, Heart, MessageSquare, Star, Trophy, Award, Shield, Zap, Target, Users, Wallet, Loader, CheckCircle } from 'lucide-react';
+import { web3Service } from '../services/web3';
 
 interface SBTBadgeProps {
   tokenId?: string;
@@ -11,6 +12,8 @@ interface SBTBadgeProps {
   impact: number;
   earnedAt?: Date;
   isNew?: boolean;
+  showMintButton?: boolean;
+  onMintSuccess?: (tokenId: number, txHash: string) => void;
 }
 
 const BadgeContainer = styled(motion.div)<{ level: string; isNew?: boolean }>`
@@ -205,6 +208,32 @@ const BadgeLevel = styled.div<{ level: string }>`
   border: 1px solid rgba(255, 255, 255, 0.3);
 `;
 
+const MintButton = styled(motion.button)<{ isMinting?: boolean; minted?: boolean }>`
+  background: ${props => props.minted ? '#28A745' : 'linear-gradient(135deg, #667eea, #764ba2)'};
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-weight: 600;
+  font-size: 12px;
+  cursor: ${props => props.isMinting || props.minted ? 'not-allowed' : 'pointer'};
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.3s ease;
+  margin-top: 12px;
+  opacity: ${props => props.isMinting ? 0.8 : 1};
+
+  &:hover {
+    transform: ${props => props.isMinting || props.minted ? 'none' : 'translateY(-1px)'};
+    box-shadow: ${props => props.isMinting || props.minted ? 'none' : '0 4px 12px rgba(102, 126, 234, 0.4)'};
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+`;
+
 const GlowEffect = styled.div<{ level: string }>`
   position: absolute;
   inset: -4px;
@@ -278,7 +307,47 @@ export const SBTBadge: React.FC<SBTBadgeProps> = ({
   impact,
   earnedAt,
   isNew = false,
+  showMintButton = false,
+  onMintSuccess,
 }) => {
+  const [isMinting, setIsMinting] = useState(false);
+  const [minted, setMinted] = useState(false);
+  const [mintError, setMintError] = useState<string | null>(null);
+
+  const handleMint = async () => {
+    if (!web3Service.isConnected()) {
+      setMintError('메타마스크를 먼저 연결해주세요.');
+      return;
+    }
+
+    if (!web3Service.isOnPolygon()) {
+      setMintError('Polygon 네트워크로 변경해주세요.');
+      return;
+    }
+
+    setIsMinting(true);
+    setMintError(null);
+
+    try {
+      const result = await web3Service.mintBadge(missionType, impact);
+
+      if (result.success && result.tokenId && result.txHash) {
+        setMinted(true);
+        onMintSuccess?.(result.tokenId, result.txHash);
+
+        // 성공 메시지 표시
+        alert(`🎉 배지가 성공적으로 민팅되었습니다!\n\n토큰 ID: ${result.tokenId}\n트랜잭션: ${result.txHash.slice(0, 10)}...${result.txHash.slice(-8)}`);
+      } else {
+        setMintError(result.error || '민팅에 실패했습니다.');
+      }
+    } catch (error: any) {
+      console.error('Mint error:', error);
+      setMintError('민팅 중 오류가 발생했습니다.');
+    } finally {
+      setIsMinting(false);
+    }
+  };
+
   return (
     <BadgeContainer
       level={level}
@@ -322,6 +391,51 @@ export const SBTBadge: React.FC<SBTBadgeProps> = ({
           textAlign: 'center',
         }}>
           {earnedAt.toLocaleDateString('ko-KR')}
+        </div>
+      )}
+
+      {showMintButton && (
+        <div style={{ textAlign: 'center' }}>
+          <MintButton
+            isMinting={isMinting}
+            minted={minted}
+            onClick={handleMint}
+            disabled={isMinting || minted}
+            whileHover={{ scale: isMinting || minted ? 1 : 1.05 }}
+            whileTap={{ scale: isMinting || minted ? 1 : 0.95 }}
+          >
+            {isMinting ? (
+              <>
+                <Loader size={14} className="animate-spin" />
+                민팅 중...
+              </>
+            ) : minted ? (
+              <>
+                <CheckCircle size={14} />
+                민팅 완료
+              </>
+            ) : (
+              <>
+                <Wallet size={14} />
+                지갑으로 받기
+              </>
+            )}
+          </MintButton>
+
+          {mintError && (
+            <div style={{
+              fontSize: '11px',
+              color: '#e53e3e',
+              marginTop: '8px',
+              textAlign: 'center',
+              background: '#fed7d7',
+              padding: '6px 12px',
+              borderRadius: '6px',
+              border: '1px solid #feb2b2'
+            }}>
+              {mintError}
+            </div>
+          )}
         </div>
       )}
     </BadgeContainer>

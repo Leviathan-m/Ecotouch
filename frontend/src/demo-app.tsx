@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import './simple-app.css';
 import { Dashboard } from './components/Dashboard';
 import { DemoModeToggle } from './components/DemoModeToggle';
+import { WalletConnect } from './components/WalletConnect';
+import { SBTBadge } from './components/SBTBadge';
 import styled from 'styled-components';
 
 // Mock data for demo purposes
@@ -113,7 +115,7 @@ const TabButton = styled.button<{ active: boolean }>`
 `;
 
 const DemoApp: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'missions' | 'badges'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'missions' | 'badges' | 'mint'>('dashboard');
   const [missions, setMissions] = useState(mockMissions);
   const [user, setUser] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -360,6 +362,74 @@ const DemoApp: React.FC = () => {
           </div>
         );
 
+      case 'mint':
+        return (
+          <div style={{ padding: '100px 20px 120px 20px' }}>
+            <h1 style={{ textAlign: 'center', marginBottom: '30px', color: '#2d3748' }}>
+              🏭 지갑으로 배지 민팅
+            </h1>
+            <p style={{ textAlign: 'center', color: '#718096', marginBottom: '40px', maxWidth: '600px', margin: '0 auto 40px' }}>
+              메타마스크에 연결하여 배지를 Polygon 네트워크에 영구적으로 기록하세요.<br/>
+              민팅된 배지는 영원히 당신의 자산으로 남습니다.
+            </p>
+
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
+              gap: '20px',
+              maxWidth: '1200px',
+              margin: '0 auto'
+            }}>
+              {mockBadges.map((badge, index) => (
+                <div key={index} style={{
+                  background: 'white',
+                  borderRadius: '20px',
+                  padding: '24px',
+                  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12)',
+                  textAlign: 'center',
+                  position: 'relative',
+                  border: '2px solid transparent',
+                  transition: 'all 0.3s ease'
+                }}>
+                  <SBTBadge
+                    level={badge.level}
+                    missionType={badge.missionType}
+                    impact={badge.impact}
+                    earnedAt={badge.earnedAt}
+                    isNew={badge.isNew}
+                    showMintButton={true}
+                    onMintSuccess={(tokenId, txHash) => {
+                      alert(`🎉 배지가 지갑으로 전송되었습니다!\n\n토큰 ID: ${tokenId}\n트랜잭션: ${txHash.slice(0, 10)}...${txHash.slice(-8)}`);
+                    }}
+                  />
+                </div>
+              ))}
+            </div>
+
+            <div style={{
+              background: 'linear-gradient(135deg, #667eea, #764ba2)',
+              color: 'white',
+              padding: '24px',
+              borderRadius: '16px',
+              marginTop: '40px',
+              textAlign: 'center',
+              maxWidth: '800px',
+              marginLeft: 'auto',
+              marginRight: 'auto'
+            }}>
+              <h3 style={{ margin: '0 0 16px 0', fontSize: '18px' }}>💡 민팅 안내</h3>
+              <ul style={{ textAlign: 'left', lineHeight: '1.6', margin: 0 }}>
+                <li>🔗 먼저 메타마스크를 연결하세요</li>
+                <li>🌐 Polygon 네트워크로 자동 전환됩니다</li>
+                <li>💰 가스비는 Polygon의 저렴한 수수료를 사용합니다</li>
+                <li>🏷️ 각 배지는 고유한 NFT로 발행됩니다</li>
+                <li>🔒 SBT 특성상 전송이 불가능합니다</li>
+                <li>📱 메타마스크에서 영구히 보관됩니다</li>
+              </ul>
+            </div>
+          </div>
+        );
+
       default:
         return <Dashboard />;
     }
@@ -368,6 +438,21 @@ const DemoApp: React.FC = () => {
   return (
     <AppContainer>
       <DemoModeToggle />
+
+      {/* Wallet Connection Section */}
+      <div style={{
+        background: 'white',
+        padding: '24px',
+        borderRadius: '16px',
+        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+        margin: '20px',
+        textAlign: 'center'
+      }}>
+        <h2 style={{ color: '#2d3748', fontSize: '20px', marginBottom: '16px' }}>
+          🔗 메타마스크 연결
+        </h2>
+        <WalletConnect />
+      </div>
 
       {renderContent()}
 
@@ -389,6 +474,12 @@ const DemoApp: React.FC = () => {
           onClick={() => setActiveTab('badges')}
         >
           🏆 배지
+        </TabButton>
+        <TabButton
+          active={activeTab === 'mint'}
+          onClick={() => setActiveTab('mint')}
+        >
+          🏭 민팅
         </TabButton>
       </TabContainer>
     </AppContainer>
