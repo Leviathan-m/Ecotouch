@@ -128,7 +128,7 @@ export const BadgeMedalSVG: React.FC<BadgeMedalSVGProps> = ({
           <feComposite in="SourceGraphic" in2="blur" operator="arithmetic" k2="-1" k3="1" />
         </filter>
         <radialGradient id="gloss" cx="30%" cy="25%" r="65%">
-          <stop offset="0%" stopColor="#ffffff" stopOpacity="0.55" />
+          <stop offset="0%" stopColor="#ffffff" stopOpacity="0.3" />
           <stop offset="60%" stopColor="#ffffff" stopOpacity="0.0" />
         </radialGradient>
         <path id="topArcPath" d={topArc} />
@@ -156,9 +156,24 @@ export const BadgeMedalSVG: React.FC<BadgeMedalSVGProps> = ({
 
       {/* Center Icon */}
       <g filter="url(#innerShadow)">
-        <text x={r} y={r + 4} textAnchor="middle" fontSize={Math.floor(size * 0.45)}>
-          {icon}
-        </text>
+        {/* Bronze: leaf over wood/earth disc */}
+        {level === 'bronze' && missionType === 'carbon_offset' && (
+          <g>
+            <circle cx={r} cy={r} r={Math.floor(size * 0.26)} fill="#6B4226" opacity="0.3" />
+            <path d={`M ${r - 14} ${r} Q ${r} ${r - 22} ${r + 14} ${r} Q ${r} ${r + 22} ${r - 14} ${r}`} fill="#6B4226" opacity="0.45" />
+            <text x={r} y={r + 6} textAnchor="middle" fontSize={Math.floor(size * 0.38)}>🌱</text>
+          </g>
+        )}
+        {/* Silver: clean leaf cluster without brown base */}
+        {level === 'silver' && missionType === 'carbon_offset' && (
+          <text x={r} y={r + 6} textAnchor="middle" fontSize={Math.floor(size * 0.40)}>🌿</text>
+        )}
+        {/* Gold/Platinum and other missions: default emoji icon */}
+        {!(missionType === 'carbon_offset' && (level === 'bronze' || level === 'silver')) && (
+          <text x={r} y={r + 4} textAnchor="middle" fontSize={Math.floor(size * 0.45)}>
+            {icon}
+          </text>
+        )}
       </g>
 
       {/* Level and Impact */}
