@@ -21,6 +21,7 @@ export default async function handler(req, res) {
       await connection.close();
       healthcheck.database = 'connected';
     } catch (dbError) {
+      console.error('Database connection error:', dbError);
       healthcheck.database = 'disconnected';
       healthcheck.status = 'degraded';
     }
@@ -51,6 +52,7 @@ export default async function handler(req, res) {
     res.status(statusCode).json(healthcheck);
 
   } catch (error) {
+    console.error('Health check error:', error);
     res.status(503).json({
       status: 'unhealthy',
       timestamp: new Date().toISOString(),
