@@ -381,28 +381,18 @@ const DemoApp: React.FC = () => {
               margin: '0 auto'
             }}>
               {mockBadges.map((badge, index) => (
-                <div key={index} style={{
-                  background: 'white',
-                  borderRadius: '20px',
-                  padding: '24px',
-                  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12)',
-                  textAlign: 'center',
-                  position: 'relative',
-                  border: '2px solid transparent',
-                  transition: 'all 0.3s ease'
-                }}>
-                  <SBTBadge
-                    level={badge.level}
-                    missionType={badge.missionType}
-                    impact={badge.impact}
-                    earnedAt={badge.earnedAt}
-                    isNew={badge.isNew}
-                    showMintButton={true}
-                    onMintSuccess={(tokenId, txHash) => {
-                      alert(`🎉 배지가 지갑으로 전송되었습니다!\n\n토큰 ID: ${tokenId}\n트랜잭션: ${txHash.slice(0, 10)}...${txHash.slice(-8)}`);
-                    }}
-                  />
-                </div>
+                <SBTBadge
+                  key={index}
+                  level={badge.level}
+                  missionType={badge.missionType}
+                  impact={badge.impact}
+                  earnedAt={badge.earnedAt}
+                  isNew={badge.isNew}
+                  showMintButton={true}
+                  onMintSuccess={(tokenId, txHash) => {
+                    alert(`🎉 배지가 지갑으로 전송되었습니다!\n\n토큰 ID: ${tokenId}\n트랜잭션: ${txHash.slice(0, 10)}...${txHash.slice(-8)}`);
+                  }}
+                />
               ))}
             </div>
 
