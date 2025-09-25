@@ -215,48 +215,68 @@ const BadgeContainer = styled(motion.div)<{ level: string; missionType: string; 
 const BadgeIcon = styled.div<{ level: string; missionType: string }>`
   position: relative;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   z-index: 2;
+  width: 100%;
+  height: 100%;
 
-  /* Icon Size and Styling */
-  font-size: ${props => {
-    switch (props.level) {
-      case 'bronze': return '48px';
-      case 'silver': return '52px';
-      case 'gold': return '56px';
-      case 'platinum': return '60px';
-      default: return '48px';
-    }
-  }};
-
-  /* Icon Selection based on Mission Type and Level */
+  /* Premium Icon Design with Custom Graphics */
   &::before {
-    content: ${props => {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: ${props => {
+      switch (props.level) {
+        case 'bronze': return '60px';
+        case 'silver': return '65px';
+        case 'gold': return '70px';
+        case 'platinum': return '75px';
+        default: return '60px';
+      }
+    }};
+    height: ${props => {
+      switch (props.level) {
+        case 'bronze': return '60px';
+        case 'silver': return '65px';
+        case 'gold': return '70px';
+        case 'platinum': return '75px';
+        default: return '60px';
+      }
+    }};
+    background: ${props => {
       const { missionType, level } = props;
 
-      // Mission Type Base Icons
-      const baseIcons = {
-        carbon_offset: level === 'gold' || level === 'platinum' ? '"🛡️"' : '"🌱"',
-        donation: level === 'gold' || level === 'platinum' ? '"👥"' : '"💝"',
-        petition: level === 'gold' || level === 'platinum' ? '"🎯"' : '"📝"'
+      // Custom SVG backgrounds for premium look
+      const svgIcons = {
+        carbon_offset: {
+          bronze: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='40' fill='%238B4513' opacity='0.3'/%3E%3Cpath d='M30 50 Q50 30 70 50 Q50 70 30 50' fill='%228B4513'/%3E%3Ccircle cx='50' cy='40' r='8' fill='%23008000'/%3E%3Ctext x='50' y='85' text-anchor='middle' fill='%23FFD700' font-size='12' font-weight='bold'%3EEARTH%3C/text%3E%3C/svg%3E")`,
+          silver: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3Cpattern id='leaves' patternUnits='userSpaceOnUse' width='20' height='20'%3E%3Cpath d='M10 5 Q15 0 20 5 Q15 10 10 5' fill='%23008000' opacity='0.3'/%3E%3C/pattern%3E%3C/defs%3E%3Ccircle cx='50' cy='50' r='40' fill='url(%23leaves)'/%3E%3Cpath d='M25 45 Q50 20 75 45 Q50 70 25 45' fill='%23008000' stroke='%23005200' stroke-width='2'/%3E%3Ctext x='50' y='85' text-anchor='middle' fill='%23E6E6FA' font-size='10' font-weight='bold'%3ENATURE%3C/text%3E%3C/svg%3E")`,
+          gold: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='40' fill='%23FFD700' opacity='0.9'/%3E%3Cpath d='M20 40 L45 25 L70 40 L45 55 Z' fill='%23B8860B'/%3E%3Ccircle cx='45' cy='40' r='8' fill='%23FFD700'/%3E%3Ctext x='50' y='80' text-anchor='middle' fill='%23FFFFFF' font-size='9' font-weight='bold'%3EPROTECT%3C/text%3E%3C/svg%3E")`,
+          platinum: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3CradialGradient id='starGlow' cx='50%25' cy='30%25'%3E%3Cstop offset='0%25' style='stop-color:%23FFFFFF;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%23E5E4E2;stop-opacity:0' /%3E%3C/radialGradient%3E%3C/defs%3E%3Ccircle cx='50' cy='50' r='40' fill='%23E5E4E2'/%3E%3Cpath d='M50 15 L55 35 L75 35 L60 50 L65 70 L50 55 L35 70 L40 50 L25 35 L45 35 Z' fill='url(%23starGlow)'/%3E%3Ctext x='50' y='85' text-anchor='middle' fill='%23FFD700' font-size='8' font-weight='bold'%3ELEGEND%3C/text%3E%3C/svg%3E")`
+        },
+        donation: {
+          bronze: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 20 C35 20 25 30 25 45 C25 60 50 80 50 80 C50 80 75 60 75 45 C75 30 65 20 50 20' fill='%23DC3545'/%3E%3Ctext x='50' y='50' text-anchor='middle' fill='%23FFFFFF' font-size='20' font-weight='bold'%3E♡%3C/text%3E%3Ctext x='50' y='85' text-anchor='middle' fill='%23FFD700' font-size='10' font-weight='bold'%3EGIVE%3C/text%3E%3C/svg%3E")`,
+          silver: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='35' cy='40' r='12' fill='%23DC3545'/%3E%3Ccircle cx='65' cy='40' r='12' fill='%23DC3545'/%3E%3Cpath d='M35 52 L45 62 L65 42' stroke='%23FFFFFF' stroke-width='3' fill='none'/%3E%3Ctext x='50' y='80' text-anchor='middle' fill='%23E6E6FA' font-size='9' font-weight='bold'%3ESHARE%3C/text%3E%3C/svg%3E")`,
+          gold: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='35' fill='%23FFD700'/%3E%3Cpath d='M50 25 C40 25 35 30 35 40 C35 50 50 65 50 65 C50 65 65 50 65 40 C65 30 60 25 50 25' fill='%23DC3545'/%3E%3Ccircle cx='50' cy='45' r='5' fill='%23FFFFFF'/%3E%3Ctext x='50' y='85' text-anchor='middle' fill='%23FFFFFF' font-size='8' font-weight='bold'%3EIMPACT%3C/text%3E%3C/svg%3E")`,
+          platinum: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='40' fill='%23E5E4E2'/%3E%3Cpath d='M25 30 L40 15 L55 30 L70 15 L75 35 L55 50 L75 65 L70 85 L55 70 L40 85 L25 70 L5 50 L25 35 Z' fill='%23FFD700'/%3E%3Ctext x='50' y='50' text-anchor='middle' fill='%23FFFFFF' font-size='16' font-weight='bold'%3E★%3C/text%3E%3Ctext x='50' y='85' text-anchor='middle' fill='%23FFD700' font-size='7' font-weight='bold'%3EHERO%3C/text%3E%3C/svg%3E")`
+        },
+        petition: {
+          bronze: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect x='20' y='30' width='60' height='40' rx='5' fill='%236F42C1'/%3E%3Cline x1='25' y1='40' x2='75' y2='40' stroke='%23FFFFFF' stroke-width='2'/%3E%3Cline x1='25' y1='50' x2='65' y2='50' stroke='%23FFFFFF' stroke-width='2'/%3E%3Cline x1='25' y1='60' x2='70' y2='60' stroke='%23FFFFFF' stroke-width='2'/%3E%3Ctext x='50' y='85' text-anchor='middle' fill='%23FFD700' font-size='10' font-weight='bold'%3ESIGN%3C/text%3E%3C/svg%3E")`,
+          silver: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect x='15' y='35' width='70' height='30' rx='8' fill='%236F42C1'/%3E%3Cpath d='M25 45 L35 55 L55 35' stroke='%23FFFFFF' stroke-width='3' fill='none'/%3E%3Ccircle cx='70' cy='50' r='8' fill='%23FFFFFF'/%3E%3Ctext x='70' y='55' text-anchor='middle' fill='%236F42C1' font-size='12' font-weight='bold'%3E!%3C/text%3E%3Ctext x='50' y='80' text-anchor='middle' fill='%23E6E6FA' font-size='9' font-weight='bold'%3EVOICE%3C/text%3E%3C/svg%3E")`,
+          gold: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='35' fill='%23FFD700'/%3E%3Ccircle cx='50' cy='50' r='25' fill='%236F42C1'/%3E%3Cpath d='M40 45 L48 53 L60 41' stroke='%23FFFFFF' stroke-width='3' fill='none'/%3E%3Ccircle cx='50' cy='35' r='3' fill='%23FFD700'/%3E%3Ctext x='50' y='85' text-anchor='middle' fill='%23FFFFFF' font-size='8' font-weight='bold'%3ECHANGE%3C/text%3E%3C/svg%3E")`,
+          platinum: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3CradialGradient id='lightning' cx='50%25' cy='30%25'%3E%3Cstop offset='0%25' style='stop-color:%23FFFFFF;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%236F42C1;stop-opacity:0' /%3E%3C/radialGradient%3E%3C/defs%3E%3Ccircle cx='50' cy='50' r='40' fill='%23E5E4E2'/%3E%3Cpath d='M45 25 L50 40 L40 40 L55 55 L48 55 L52 70 L45 55 L42 70 L37 55 L52 40 L42 40 Z' fill='url(%23lightning)'/%3E%3Ctext x='50' y='85' text-anchor='middle' fill='%23FFD700' font-size='7' font-weight='bold'%3EPOWER%3C/text%3E%3C/svg%3E")`
+        }
       };
 
-      // Level-specific Icon Variations
-      if (level === 'platinum') {
-        switch (missionType) {
-          case 'carbon_offset': return '"🌟"';
-          case 'donation': return '"🏆"';
-          case 'petition': return '"⚡"';
-          default: return '"⭐"';
-        }
-      }
-
-      return baseIcons[missionType as keyof typeof baseIcons] || '"🎯"';
+      return svgIcons[missionType as keyof typeof svgIcons]?.[level as keyof typeof svgIcons.carbon_offset] || `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='40' fill='%236C757D'/%3E%3Ctext x='50' y='55' text-anchor='middle' fill='%23FFFFFF' font-size='12'%3E?%3C/text%3E%3C/svg%3E")`;
     }};
-
-    display: inline-block;
-    filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
     animation: ${props => {
       switch (props.level) {
         case 'bronze': return 'none';
