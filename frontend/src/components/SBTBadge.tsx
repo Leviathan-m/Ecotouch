@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { MissionType } from '../types';
-import { Leaf, Heart, MessageSquare, Star, Trophy, Award } from 'lucide-react';
+import { Leaf, Heart, MessageSquare, Star, Trophy, Award, Shield, Zap, Target, Users } from 'lucide-react';
 
 interface SBTBadgeProps {
   tokenId?: string;
@@ -18,53 +18,93 @@ const BadgeContainer = styled(motion.div)<{ level: string; isNew?: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 16px;
-  background: white;
-  border-radius: 16px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-  border: 2px solid ${props => {
+  padding: 20px;
+  background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+  border-radius: 20px;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.12),
+    0 2px 8px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  border: 3px solid ${props => {
     switch (props.level) {
-      case 'bronze': return '#CD7F32';
-      case 'silver': return '#C0C0C0';
-      case 'gold': return '#FFD700';
-      case 'platinum': return '#E5E4E2';
+      case 'bronze': return 'linear-gradient(45deg, #CD7F32, #A0522D)';
+      case 'silver': return 'linear-gradient(45deg, #C0C0C0, #A8A8A8)';
+      case 'gold': return 'linear-gradient(45deg, #FFD700, #FFA500)';
+      case 'platinum': return 'linear-gradient(45deg, #E5E4E2, #B8B8B8)';
       default: return '#6C757D';
     }
   }};
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(10px);
 
   ${props => props.isNew && `
     &::before {
-      content: 'NEW';
+      content: '✨ NEW';
       position: absolute;
-      top: -8px;
-      right: -8px;
-      background: #DC3545;
+      top: -10px;
+      right: -10px;
+      background: linear-gradient(45deg, #FF6B6B, #DC3545);
       color: white;
-      font-size: 10px;
-      font-weight: 700;
-      padding: 2px 6px;
-      border-radius: 8px;
-      z-index: 1;
+      font-size: 9px;
+      font-weight: 800;
+      padding: 4px 8px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(255, 107, 107, 0.4);
+      z-index: 10;
+      letter-spacing: 0.5px;
+      border: 2px solid rgba(255, 255, 255, 0.8);
+      animation: pulse 2s infinite;
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: -2px;
+      right: -2px;
+      width: 8px;
+      height: 8px;
+      background: #FF6B6B;
+      border-radius: 50%;
+      animation: sparkle 1.5s ease-in-out infinite;
     }
   `}
 
   &:hover {
+    transform: translateY(-8px) scale(1.08);
+    box-shadow:
+      0 20px 60px rgba(0, 0, 0, 0.2),
+      0 8px 32px rgba(0, 0, 0, 0.15),
+      inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    border-color: transparent;
+  }
+
+  &:active {
     transform: translateY(-4px) scale(1.05);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    transition: all 0.1s ease;
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+  }
+
+  @keyframes sparkle {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.7; transform: scale(1.3); }
   }
 `;
 
 const BadgeIcon = styled.div<{ level: string; missionType: string }>`
-  width: 64px;
-  height: 64px;
+  width: 72px;
+  height: 72px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
   position: relative;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15));
 
   background: ${props => {
     const baseColor = (() => {
@@ -76,13 +116,23 @@ const BadgeIcon = styled.div<{ level: string; missionType: string }>`
       }
     })();
 
-    return `linear-gradient(135deg, ${baseColor} 0%, ${baseColor}dd 100%)`;
+    return `linear-gradient(145deg, ${baseColor} 0%, ${baseColor}88 50%, ${baseColor}dd 100%)`;
+  }};
+
+  border: 4px solid ${props => {
+    switch (props.level) {
+      case 'bronze': return 'linear-gradient(45deg, #CD7F32, #A0522D)';
+      case 'silver': return 'linear-gradient(45deg, #C0C0C0, #A8A8A8)';
+      case 'gold': return 'linear-gradient(45deg, #FFD700, #FFA500)';
+      case 'platinum': return 'linear-gradient(45deg, #E5E4E2, #B8B8B8)';
+      default: return '#6C757D';
+    }
   }};
 
   &::before {
     content: '';
     position: absolute;
-    inset: -3px;
+    inset: -2px;
     border-radius: 50%;
     background: ${props => {
       switch (props.level) {
@@ -93,44 +143,66 @@ const BadgeIcon = styled.div<{ level: string; missionType: string }>`
         default: return '#6C757D';
       }
     }};
-    z-index: -1;
+    z-index: -2;
+    opacity: 0.7;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.1) 70%, transparent 100%);
+    z-index: 1;
   }
 `;
 
 const BadgeContent = styled.div`
   text-align: center;
+  position: relative;
+  z-index: 2;
 `;
 
 const BadgeTitle = styled.h4`
-  font-size: 14px;
-  font-weight: 600;
-  color: #2d3748;
-  margin: 0 0 4px 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: #1a202c;
+  margin: 0 0 6px 0;
+  letter-spacing: -0.025em;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 `;
 
 const BadgeImpact = styled.div`
-  font-size: 12px;
-  color: #718096;
-  margin-bottom: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #4a5568;
+  margin-bottom: 10px;
+  opacity: 0.9;
 `;
 
 const BadgeLevel = styled.div<{ level: string }>`
-  font-size: 10px;
-  font-weight: 700;
+  font-size: 11px;
+  font-weight: 800;
   color: white;
   background: ${props => {
     switch (props.level) {
-      case 'bronze': return '#CD7F32';
-      case 'silver': return '#C0C0C0';
-      case 'gold': return '#FFD700';
-      case 'platinum': return '#E5E4E2';
+      case 'bronze': return 'linear-gradient(45deg, #CD7F32, #A0522D)';
+      case 'silver': return 'linear-gradient(45deg, #C0C0C0, #A8A8A8)';
+      case 'gold': return 'linear-gradient(45deg, #FFD700, #FFA500)';
+      case 'platinum': return 'linear-gradient(45deg, #E5E4E2, #B8B8B8)';
       default: return '#6C757D';
     }
   }};
-  padding: 2px 8px;
-  border-radius: 8px;
+  padding: 4px 12px;
+  border-radius: 12px;
   text-transform: uppercase;
   display: inline-block;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
 `;
 
 const GlowEffect = styled.div<{ level: string }>`
@@ -154,17 +226,30 @@ const GlowEffect = styled.div<{ level: string }>`
 `;
 
 const getMissionIcon = (missionType: MissionType, level: string) => {
-  const iconProps = { size: 32, color: 'white' };
+  const iconProps = { size: 36, color: 'white', strokeWidth: 2.5 };
 
+  // 레벨에 따른 아이콘 변형
   switch (missionType) {
     case 'carbon_offset':
+      if (level === 'gold' || level === 'platinum') {
+        return <Shield {...iconProps} />;
+      }
       return <Leaf {...iconProps} />;
+
     case 'donation':
+      if (level === 'gold' || level === 'platinum') {
+        return <Users {...iconProps} />;
+      }
       return <Heart {...iconProps} />;
+
     case 'petition':
+      if (level === 'gold' || level === 'platinum') {
+        return <Target {...iconProps} />;
+      }
       return <MessageSquare {...iconProps} />;
+
     default:
-      return <Star {...iconProps} />;
+      return <Zap {...iconProps} />;
   }
 };
 
@@ -179,6 +264,8 @@ const getMissionTypeText = (type: MissionType) => {
 
 const getLevelIcon = (level: string) => {
   switch (level) {
+    case 'bronze': return <Shield size={14} color="#CD7F32" />;
+    case 'silver': return <Star size={14} color="#C0C0C0" />;
     case 'gold': return <Trophy size={16} color="#FFD700" />;
     case 'platinum': return <Award size={16} color="#E5E4E2" />;
     default: return null;
@@ -205,18 +292,18 @@ export const SBTBadge: React.FC<SBTBadgeProps> = ({
 
       <BadgeIcon level={level} missionType={missionType}>
         {getMissionIcon(missionType, level)}
-        {(level === 'gold' || level === 'platinum') && (
-          <div style={{
-            position: 'absolute',
-            top: '-2px',
-            right: '-2px',
-            background: 'white',
-            borderRadius: '50%',
-            padding: '2px',
-          }}>
-            {getLevelIcon(level)}
-          </div>
-        )}
+        <div style={{
+          position: 'absolute',
+          top: '-3px',
+          right: '-3px',
+          background: 'rgba(255, 255, 255, 0.95)',
+          borderRadius: '50%',
+          padding: '3px',
+          boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
+          border: '2px solid rgba(255, 255, 255, 0.8)',
+        }}>
+          {getLevelIcon(level)}
+        </div>
       </BadgeIcon>
 
       <BadgeContent>
@@ -227,9 +314,12 @@ export const SBTBadge: React.FC<SBTBadgeProps> = ({
 
       {earnedAt && (
         <div style={{
-          fontSize: '10px',
-          color: '#a0aec0',
-          marginTop: '8px',
+          fontSize: '11px',
+          fontWeight: '500',
+          color: '#718096',
+          marginTop: '12px',
+          opacity: 0.8,
+          textAlign: 'center',
         }}>
           {earnedAt.toLocaleDateString('ko-KR')}
         </div>
