@@ -9,6 +9,7 @@
     "@types/react-dom": "^18.2.0",
     "@web3modal/wagmi": "^3.5.0",
     "axios": "^1.5.0",
+    "ethers": "^5.7.2",
     "framer-motion": "^10.16.0",
     "i18next": "^23.0.0",
     "lucide-react": "^0.294.0",
@@ -23,13 +24,13 @@
     "wagmi": "^1.4.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "cross-env GENERATE_SOURCEMAP=false react-scripts start",
+    "build": "cross-env GENERATE_SOURCEMAP=false react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "dev": "npm start",
-    "demo": "cross-env REACT_APP_DEMO_MODE=true npm start",
-    "dev-demo": "cross-env REACT_APP_DEMO_MODE=true npm start",
+    "demo": "cross-env GENERATE_SOURCEMAP=false REACT_APP_DEMO_MODE=true npm start",
+    "dev-demo": "cross-env GENERATE_SOURCEMAP=false REACT_APP_DEMO_MODE=true npm start",
     "type-check": "tsc --noEmit",
     "vercel-build": "npm run build"
   },
@@ -53,6 +54,9 @@
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
-    "cross-env": "^7.0.3"
+    "ajv": "^8.12.0",
+    "ajv-keywords": "^5.1.0",
+    "cross-env": "^7.0.3",
+    "schema-utils": "^3.1.2"
   }
 }

@@ -205,7 +205,7 @@ export const MissionCard: React.FC<MissionCardProps> = ({ mission }) => {
 
   const progress = getProgressByMissionId(mission.id);
   const isCompleted = progress?.status === 'completed';
-  const isInProgress = progress?.status === 'in_progress';
+  const isInProgress = progress?.status === 'processing';
 
   const handleStartMission = async () => {
     if (isCompleted || isInProgress) return;
@@ -258,7 +258,7 @@ export const MissionCard: React.FC<MissionCardProps> = ({ mission }) => {
                 {progress.progress}%
               </span>
             </div>
-            <ProgressBar>
+            <ProgressBar progress={progress.progress}>
               <ProgressFill progress={progress.progress} />
             </ProgressBar>
           </ProgressIndicator>

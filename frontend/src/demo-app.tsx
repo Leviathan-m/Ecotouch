@@ -117,7 +117,7 @@ const TabButton = styled.button<{ active: boolean }>`
 
 const DemoApp: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'dashboard' | 'missions' | 'badges' | 'mint'>('dashboard');
-  const [missions, setMissions] = useState(mockMissions);
+  const [missions, setMissions] = useState<typeof mockMissions>(mockMissions);
   const [user, setUser] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -142,7 +142,7 @@ const DemoApp: React.FC = () => {
 
     // Simulate API call
     setTimeout(() => {
-      setMissions(prev => prev.map(mission =>
+      setMissions((prev: typeof mockMissions) => prev.map(mission =>
         mission.id === missionId
           ? { ...mission, status: 'processing' as const }
           : mission
@@ -158,7 +158,7 @@ const DemoApp: React.FC = () => {
 
     // Simulate API call
     setTimeout(() => {
-      setMissions(prev => prev.map(mission =>
+      setMissions((prev: typeof mockMissions) => prev.map(mission =>
         mission.id === missionId
           ? { ...mission, status: 'completed' as const }
           : mission

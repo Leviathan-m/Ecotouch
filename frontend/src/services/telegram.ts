@@ -30,11 +30,11 @@ export class TelegramService {
     this.webApp.expand();
 
     // Set theme colors (Eco Touch green theme)
-    this.webApp.setHeaderColor('#28A745');
-    this.webApp.setBackgroundColor('#ffffff');
+    try { (this.webApp as any).setHeaderColor?.('#28A745'); } catch {}
+    try { (this.webApp as any).setBackgroundColor?.('#ffffff'); } catch {}
 
     // Enable closing confirmation
-    this.webApp.enableClosingConfirmation();
+    try { (this.webApp as any).enableClosingConfirmation?.(); } catch {}
 
     // Handle viewport changes
     this.webApp.onEvent('viewportChanged', () => {

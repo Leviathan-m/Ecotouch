@@ -1,7 +1,7 @@
 import { ethers } from 'ethers';
 import { createWeb3Modal, defaultWagmiConfig } from '@web3modal/wagmi/react';
 import { mainnet, polygon } from 'viem/chains';
-import { reconnect, watchAccount, watchNetwork, getAccount, getNetwork } from '@wagmi/core';
+import { watchAccount, watchNetwork, getAccount, getNetwork } from '@wagmi/core';
 
 // Web3Modal configuration
 const projectId = process.env.REACT_APP_WALLETCONNECT_PROJECT_ID || 'demo-project-id';
@@ -70,9 +70,9 @@ export class Web3Service {
   private async initialize() {
     try {
       // Watch for account changes
-      watchAccount((account) => {
+      watchAccount((account: any) => {
         console.log('Account changed:', account);
-        if (account.isConnected) {
+        if (account?.isConnected) {
           this.connectProvider();
         } else {
           this.disconnect();
@@ -80,16 +80,16 @@ export class Web3Service {
       });
 
       // Watch for network changes
-      watchNetwork((network) => {
+      watchNetwork((network: any) => {
         console.log('Network changed:', network);
-        if (network.chain?.id === polygon.id) {
+        if (network?.chain?.id === polygon.id) {
           this.connectContracts();
         }
       });
 
       // Try to reconnect if already connected
-      const account = getAccount();
-      if (account.isConnected) {
+      const account: any = getAccount();
+      if (account?.isConnected) {
         await this.connectProvider();
       }
     } catch (error) {
@@ -99,8 +99,8 @@ export class Web3Service {
 
   private async connectProvider() {
     try {
-      if (typeof window !== 'undefined' && window.ethereum) {
-        this.provider = new ethers.providers.Web3Provider(window.ethereum);
+      if (typeof window !== 'undefined' && (window as any).ethereum) {
+        this.provider = new ethers.providers.Web3Provider((window as any).ethereum);
         await this.provider.send("eth_requestAccounts", []);
         this.signer = this.provider.getSigner();
         console.log('🟢 Web3 provider connected');
@@ -117,9 +117,9 @@ export class Web3Service {
     if (!this.provider || !this.signer) return;
 
     try {
-      const network = await this.provider.getNetwork();
+      const network: any = await this.provider.getNetwork();
 
-      if (network.chainId === polygon.id) {
+      if (network?.chainId === polygon.id) {
         // Connect to Badge SBT contract
         this.badgeContract = new ethers.Contract(
           CONTRACT_ADDRESSES.POLYGON.BADGE_SBT,
@@ -163,7 +163,7 @@ export class Web3Service {
 
   async disconnectWallet(): Promise<void> {
     try {
-      await web3Modal.disconnect();
+      // Web3Modal v3: disconnect handled via wallet UI
     } catch (error) {
       console.error('Wallet disconnect error:', error);
     }

@@ -24,12 +24,12 @@ export const useTelegram = () => {
         // Expand the WebApp to full height
         tgWebApp.expand();
 
-        // Set theme colors
-        tgWebApp.setHeaderColor('#28A745'); // Eco Touch green theme
-        tgWebApp.setBackgroundColor('#ffffff');
+        // Set theme colors (compat: older SDKs may expose properties not methods)
+        try { (tgWebApp as any).setHeaderColor?.('#28A745'); } catch {}
+        try { (tgWebApp as any).setBackgroundColor?.('#ffffff'); } catch {}
 
         // Enable closing confirmation
-        tgWebApp.enableClosingConfirmation();
+        try { (tgWebApp as any).enableClosingConfirmation?.(); } catch {}
 
         setWebApp(tgWebApp);
         setUser(tgWebApp.initDataUnsafe.user || null);
@@ -63,7 +63,7 @@ export const useTelegram = () => {
         // Mock webApp for demo functionality
         const mockWebApp: TelegramWebApp = {
           initData: '',
-          initDataUnsafe: { user: mockUser },
+          initDataUnsafe: { user: mockUser, auth_date: Date.now()/1000 as any, hash: '' as any } as any,
           version: '6.0',
           platform: 'demo',
           colorScheme: 'light',
