@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { MissionType } from '../types';
 import { Leaf, Heart, MessageSquare, Star, Trophy, Award, Shield, Zap, Target, Users, Wallet, Loader, CheckCircle } from 'lucide-react';
 import { web3Service } from '../services/web3';
+import BadgeMedalSVG from './BadgeMedalSVG';
 
 interface SBTBadgeProps {
   tokenId?: string;
@@ -558,19 +559,103 @@ export const SBTBadge: React.FC<SBTBadgeProps> = ({
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
-      <BadgeContainer
-        level={level}
-        missionType={missionType}
-        isNew={isNew}
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.3 }}
-        role="img"
-        aria-label={`${level} ${missionType} badge with ${impact} impact score`}
-      >
-        <BadgeIcon level={level} missionType={missionType} />
-        <BadgeLevel level={level}>{level}</BadgeLevel>
-      </BadgeContainer>
+      <div style={{ position: 'relative' }}>
+        <BadgeMedalSVG
+          missionType={missionType}
+          level={level}
+          impact={impact}
+          isNew={isNew}
+          topArcText={(
+            {
+              carbon_offset: {
+                bronze: 'ECO • GUARDIAN • BRONZE',
+                silver: 'ECO • CHAMPION • SILVER',
+                gold: 'ECO • MASTER • GOLD',
+                platinum: 'ECO • LEGEND • PLATINUM'
+              },
+              donation: {
+                bronze: 'COMPASSION • BRONZE • GIVER',
+                silver: 'KINDNESS • SILVER • PATRON',
+                gold: 'HUMANITY • GOLD • BENEFACTOR',
+                platinum: 'PHILANTHROPIST • PLATINUM • LEGEND'
+              },
+              petition: {
+                bronze: 'VOICE • BRONZE • ADVOCATE',
+                silver: 'ACTIVISM • SILVER • ORGANIZER',
+                gold: 'INFLUENCE • GOLD • CATALYST',
+                platinum: 'REVOLUTIONARY • PLATINUM • VISIONARY'
+              }
+            } as any
+          )[missionType][level]}
+          bottomArcText={(
+            {
+              carbon_offset: {
+                bronze: 'CARBON NEUTRAL CHAMPION',
+                silver: 'SUSTAINABLE LIVING ADVOCATE',
+                gold: 'CLIMATE ACTION LEADER',
+                platinum: "EARTH'S GUARDIAN SUPREME"
+              },
+              donation: {
+                bronze: 'SHARING IS CARING',
+                silver: 'BUILDING BETTER COMMUNITIES',
+                gold: 'TRANSFORMING LIVES',
+                platinum: 'BEACON OF HOPE'
+              },
+              petition: {
+                bronze: 'DEMOCRACY IN ACTION',
+                silver: 'MOBILIZING FOR CHANGE',
+                gold: 'DRIVING POLICY CHANGE',
+                platinum: 'ARCHITECT OF TOMORROW'
+              }
+            } as any
+          )[missionType][level]}
+          achievement={(
+            {
+              carbon_offset: {
+                bronze: '지구 수호자',
+                silver: '지속가능 전도사',
+                gold: '기후 행동 리더',
+                platinum: '지구 수호 전설'
+              },
+              donation: {
+                bronze: '나눔의 시작',
+                silver: '공동체 후원자',
+                gold: '삶의 변화 창조자',
+                platinum: '희망의 등대'
+              },
+              petition: {
+                bronze: '민주주의 참여자',
+                silver: '변화 조직가',
+                gold: '정책 변화 촉매',
+                platinum: '미래 설계자'
+              }
+            } as any
+          )[missionType][level]}
+          quote={(
+            {
+              carbon_offset: {
+                bronze: 'Every small action creates big change',
+                silver: 'Leading by green example',
+                gold: "Protecting our planet's future",
+                platinum: 'The ultimate environmental steward'
+              },
+              donation: {
+                bronze: 'Generosity begins with the first gift',
+                silver: 'Together we create stronger communities',
+                gold: 'Changing the world one gift at a time',
+                platinum: 'A lifetime of compassionate giving'
+              },
+              petition: {
+                bronze: 'Your voice matters in democracy',
+                silver: 'Organizing voices for greater impact',
+                gold: 'Turning advocacy into real change',
+                platinum: 'Revolutionary change through persistent voice'
+              }
+            } as any
+          )[missionType][level]}
+          size={120}
+        />
+      </div>
 
       <BadgeContent>
         <BadgeTitle>{getMissionTypeText(missionType)}</BadgeTitle>

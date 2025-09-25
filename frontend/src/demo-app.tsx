@@ -4,6 +4,7 @@ import { Dashboard } from './components/Dashboard';
 import { DemoModeToggle } from './components/DemoModeToggle';
 import { WalletConnect } from './components/WalletConnect';
 import { SBTBadge } from './components/SBTBadge';
+import BadgeMedalSVG from './components/BadgeMedalSVG';
 import styled from 'styled-components';
 
 // Mock data for demo purposes
