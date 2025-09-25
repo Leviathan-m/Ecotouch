@@ -145,7 +145,7 @@ export const telegramAuth = async (
     const telegramUser = authData.user;
     req.telegramUser = telegramUser;
 
-    let user = await User.findOne({ telegramId: telegramUser.id });
+    let user = await User.findOne({ where: { telegramId: telegramUser.id } });
 
     if (!user) {
       // Create new user
