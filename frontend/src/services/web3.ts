@@ -4,7 +4,7 @@ import { mainnet, polygon } from 'viem/chains';
 import { watchAccount, watchNetwork, getAccount, getNetwork } from '@wagmi/core';
 
 // Web3Modal configuration
-const projectId = process.env.REACT_APP_WALLETCONNECT_PROJECT_ID || 'demo-project-id';
+const projectId = process.env.REACT_APP_WALLETCONNECT_PROJECT_ID || '';
 
 const metadata = {
   name: 'Eco Touch',
@@ -14,19 +14,33 @@ const metadata = {
 };
 
 const chains = [polygon, mainnet];
-const wagmiConfig = defaultWagmiConfig({ chains, projectId, metadata });
+const wagmiConfig = defaultWagmiConfig({ chains, projectId: projectId || 'invalid', metadata });
 
 // Create Web3Modal instance
-export const web3Modal = createWeb3Modal({
-  wagmiConfig,
-  projectId,
-  chains,
-  themeMode: 'light',
-  themeVariables: {
-    '--w3m-color-mix': '#28A745',
-    '--w3m-color-mix-strength': 20
-  }
-});
+export const web3Modal = createWeb3Modal(
+  projectId
+    ? {
+        wagmiConfig,
+        projectId,
+        chains,
+        themeMode: 'light',
+        themeVariables: {
+          '--w3m-color-mix': '#28A745',
+          '--w3m-color-mix-strength': 20
+        }
+      }
+    : {
+        wagmiConfig,
+        projectId: 'invalid',
+        chains,
+        themeMode: 'light',
+        enableAnalytics: false,
+        themeVariables: {
+          '--w3m-color-mix': '#28A745',
+          '--w3m-color-mix-strength': 20
+        }
+      }
+);
 
 // Contract addresses (will be updated after deployment)
 export const CONTRACT_ADDRESSES = {
@@ -153,6 +167,10 @@ export class Web3Service {
 
   async connectWallet(): Promise<boolean> {
     try {
+      if (!projectId) {
+        alert('지갑 연결은 프로덕션 키에서만 가능합니다.');
+        return false;
+      }
       web3Modal.open();
       return true;
     } catch (error) {

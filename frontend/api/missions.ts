@@ -13,18 +13,19 @@ const handler = async (req, res) => {
       if (req.query.id) {
         const mission = mockMissions.find(m => m.id === req.query.id);
         if (!mission) return res.status(404).json({ error: 'Mission not found' });
-        res.json(mission);
+        res.json({ success: true, data: mission });
       } else {
-        res.json(mockMissions);
+        res.json({ success: true, data: mockMissions });
       }
     } else if (req.method === 'POST') {
-      if (req.query.id && req.query.action === 'start') {
-        const mission = mockMissions.find(m => m.id === req.query.id);
+      if ((req.query.id || req.body?.id) && (req.query.action === 'start' || req.body?.action === 'start')) {
+        const id = (req.query.id as string) || req.body.id;
+        const mission = mockMissions.find(m => m.id === id);
         if (!mission) return res.status(404).json({ error: 'Mission not found' });
         mission.status = 'processing';
-        res.json({ message: `Mission ${req.query.id} started`, mission });
+        res.json({ success: true, data: { missionId: id, status: 'processing', progress: 0, logs: [] } });
       } else {
-        res.status(201).json({ message: 'Mission creation not implemented in demo' });
+        res.status(201).json({ success: true, message: 'Mission creation not implemented in demo' });
       }
     } else {
       res.status(405).json({ error: 'Method not allowed' });
