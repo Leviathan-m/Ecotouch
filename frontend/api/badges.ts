@@ -9,19 +9,11 @@ const mockBadges = [
 export default async function handler(req, res) {
   try {
     if (req.method === 'GET') {
-      // Get user badges
       res.json(mockBadges);
     } else if (req.method === 'POST') {
-      // Mint SBT badge
-      // Mock minting response
       const tokenId = Math.floor(Math.random() * 1000000);
       const txHash = '0x' + Math.random().toString(16).substr(2, 64);
-      res.json({
-        success: true,
-        tokenId,
-        txHash,
-        message: 'SBT badge minted successfully'
-      });
+      res.json({ success: true, tokenId, txHash, message: 'SBT badge minted successfully' });
     } else {
       res.status(405).json({ error: 'Method not allowed' });
     }
@@ -30,3 +22,5 @@ export default async function handler(req, res) {
     res.status(500).json({ error: 'Internal server error' });
   }
 }
+
+

@@ -16,10 +16,8 @@ const mockUser = {
 export default async function handler(req, res) {
   try {
     if (req.method === 'GET') {
-      // Get user profile
       res.json(mockUser);
     } else if (req.method === 'PUT') {
-      // Update user profile
       const updatedData = req.body;
       Object.assign(mockUser, updatedData);
       res.json({ message: 'User profile updated', user: mockUser });
@@ -31,3 +29,5 @@ export default async function handler(req, res) {
     res.status(500).json({ error: 'Internal server error' });
   }
 }
+
+

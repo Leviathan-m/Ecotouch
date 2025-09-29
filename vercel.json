@@ -4,20 +4,9 @@
     {
       "src": "frontend/package.json",
       "use": "@vercel/static-build",
-      "config": {
-        "distDir": "build"
-      }
-    }
-  ],
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "/api/$1"
+      "config": { "distDir": "build" }
     },
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
-    }
+    { "src": "frontend/api/**/*.ts", "use": "@vercel/node" }
   ],
   "env": {
     "NODE_ENV": "production",
