@@ -8,7 +8,8 @@ import { ProgressBar } from './ProgressBar';
 import { SBTBadge } from './SBTBadge';
 import { WorkLog } from './WorkLog';
 import { Mission, ProgressStats } from '../types';
-import { Leaf, Trophy, Target, TrendingUp } from 'lucide-react';
+import { Leaf, Trophy, Target, TrendingUp, Share2 } from 'lucide-react';
+import shareService from '../services/share';
 
 const DashboardContainer = styled.div`
   min-height: 100vh;
@@ -145,6 +146,21 @@ export const Dashboard: React.FC = () => {
     nextMilestone: 25,
   });
 
+  const [isSharing, setIsSharing] = useState(false);
+
+  const handleShareProgress = async () => {
+    try {
+      setIsSharing(true);
+      const title = '나의 Eco Touch ESG 임팩트 현황';
+      const text = `총 임팩트 ${progressStats.totalImpact}점, 완료 미션 ${progressStats.completedMissions}개, 주간 달성률 ${Math.round(progressStats.weeklyProgress)}%`;
+      await shareService.share({ type: 'progress', title, text, meta: progressStats as any });
+    } catch (e) {
+      console.error('Share progress error:', e);
+    } finally {
+      setIsSharing(false);
+    }
+  };
+
   useEffect(() => {
     if (missions.length > 0) {
       const completed = getCompletedMissionsCount();
@@ -181,6 +197,26 @@ export const Dashboard: React.FC = () => {
       <Header>
         <Title>🌱 Eco Touch</Title>
         <Subtitle>한 번의 터치로 지구를 지키다</Subtitle>
+        <div style={{ marginTop: 12 }}>
+          <button
+            onClick={handleShareProgress}
+            disabled={isSharing}
+            style={{
+              background: 'linear-gradient(135deg, #00B894, #0984E3)',
+              color: 'white',
+              border: 'none',
+              borderRadius: 8,
+              padding: '8px 12px',
+              fontWeight: 600,
+              cursor: isSharing ? 'not-allowed' : 'pointer',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 6,
+            }}
+          >
+            <Share2 size={16} /> {isSharing ? '공유 중...' : '임팩트 자랑하기'}
+          </button>
+        </div>
         {user && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}

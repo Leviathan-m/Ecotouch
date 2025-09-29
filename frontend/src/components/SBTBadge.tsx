@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { MissionType } from '../types';
-import { Leaf, Heart, MessageSquare, Star, Trophy, Award, Shield, Zap, Target, Users, Wallet, Loader, CheckCircle } from 'lucide-react';
+import { Leaf, Heart, MessageSquare, Star, Trophy, Award, Shield, Zap, Target, Users, Wallet, Loader, CheckCircle, Share2 } from 'lucide-react';
+import shareService from '../services/share';
 import { web3Service } from '../services/web3';
 import BadgeMedalSVG from './BadgeMedalSVG';
 
@@ -522,6 +523,7 @@ export const SBTBadge: React.FC<SBTBadgeProps> = ({
   const [isMinting, setIsMinting] = useState(false);
   const [minted, setMinted] = useState(false);
   const [mintError, setMintError] = useState<string | null>(null);
+  const [isSharing, setIsSharing] = useState(false);
 
   const handleMint = async () => {
     if (!web3Service.isConnected()) {
@@ -554,6 +556,24 @@ export const SBTBadge: React.FC<SBTBadgeProps> = ({
       setMintError('민팅 중 오류가 발생했습니다.');
     } finally {
       setIsMinting(false);
+    }
+  };
+
+  const handleShare = async () => {
+    try {
+      setIsSharing(true);
+      const title = `Eco Touch ${getMissionTypeText(missionType)} 배지`;
+      const text = `${impact} 임팩트 포인트를 달성했어요!`;
+      await shareService.share({
+        type: 'badge',
+        title,
+        text,
+        meta: { missionType, level, impact },
+      });
+    } catch (e) {
+      console.error('Share error:', e);
+    } finally {
+      setIsSharing(false);
     }
   };
 
@@ -701,6 +721,17 @@ export const SBTBadge: React.FC<SBTBadgeProps> = ({
           )}
         </MintButton>
       )}
+
+      {/* Share Button */}
+      <MintButton
+        onClick={handleShare}
+        disabled={isSharing}
+        whileHover={{ scale: isSharing ? 1 : 1.05 }}
+        whileTap={{ scale: isSharing ? 1 : 0.95 }}
+        style={{ background: 'linear-gradient(135deg, #00B894, #0984E3)' }}
+      >
+        <Share2 size={14} /> {isSharing ? '공유 중...' : '자랑하기'}
+      </MintButton>
 
       {mintError && (
         <div style={{
