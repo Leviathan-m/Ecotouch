@@ -16,11 +16,11 @@ const mockUser = {
 const handler = async (req, res) => {
   try {
     if (req.method === 'GET') {
-      res.json(mockUser);
+      res.json({ success: true, data: mockUser });
     } else if (req.method === 'PUT') {
       const updatedData = req.body;
       Object.assign(mockUser, updatedData);
-      res.json({ message: 'User profile updated', user: mockUser });
+      res.json({ success: true, message: 'User profile updated', data: mockUser });
     } else {
       res.status(405).json({ error: 'Method not allowed' });
     }

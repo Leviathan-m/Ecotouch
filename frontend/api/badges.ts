@@ -9,11 +9,11 @@ const mockBadges = [
 const handler = async (req, res) => {
   try {
     if (req.method === 'GET') {
-      res.json(mockBadges);
+      res.json({ success: true, data: mockBadges });
     } else if (req.method === 'POST') {
       const tokenId = Math.floor(Math.random() * 1000000);
       const txHash = '0x' + Math.random().toString(16).substr(2, 64);
-      res.json({ success: true, tokenId, txHash, message: 'SBT badge minted successfully' });
+      res.json({ success: true, data: { tokenId, txHash }, message: 'SBT badge minted successfully' });
     } else {
       res.status(405).json({ error: 'Method not allowed' });
     }
