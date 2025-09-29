@@ -4,7 +4,11 @@
     {
       "src": "frontend/package.json",
       "use": "@vercel/static-build",
-      "config": { "distDir": "build" }
+      "config": {
+        "distDir": "build",
+        "installCommand": "npm install --legacy-peer-deps",
+        "buildCommand": "npm run build"
+      }
     },
     { "src": "frontend/api/**/*.ts", "use": "@vercel/node" },
     { "src": "api/**/*.ts", "use": "@vercel/node", "config": { "includeFiles": [] } }
