@@ -255,6 +255,67 @@ docker-compose -f docker-compose.prod.yml up -d
 npm run deploy
 ```
 
+### Vercel 통합 배포 가이드 (최신)
+
+- 루트 `vercel.json` 제거 후, Vercel 프로젝트 설정을 사용합니다.
+  - Root Directory: `frontend`
+  - Framework Preset: Create React App
+  - Install Command: `npm install --legacy-peer-deps`
+  - Build Command: `npm run build`
+  - Output Directory: `build`
+  - Functions: `frontend/api/*.ts` → 자동으로 `/api/*` 경로로 노출
+
+- 배포 보호(Deployment Protection) 우회
+  - Settings → Security → Protection Bypass 토큰 설정(32자)
+  - 브라우저에서 1회 쿠키 설정: `https://<domain>/api/health?__vercel_protection_bypass=<TOKEN>`
+  - 서버 사이드 점검 시 헤더도 가능: `x-vercel-protection-bypass: <TOKEN>`
+
+- 도메인
+  - 기본 접근 도메인: `https://ecotouch-tau.vercel.app`
+
+### 프런트엔드 최신 변경 요약
+
+- API 클라이언트 `src/services/api.ts`
+  - `baseURL: '/api'` (동일 도메인 호출)
+  - 응답 표준화: 모든 서버 응답은 `{ success, data, message? }` 가정
+
+- Web3Modal/Wagmi 설정 `src/services/web3.ts`
+  - `REACT_APP_WALLETCONNECT_PROJECT_ID`가 비어있으면 위젯 호출 차단 및 안내
+  - 실제 연결을 원하면 Vercel 환경변수에 프로젝트 ID 등록
+
+- 엔트리 HTML 정리
+  - `frontend/public/index.html`를 CRA 표준 루트(div#root)로 정리
+  - 로컬 데모 `http://localhost:3001`로의 하드코딩 호출 제거
+
+### 서버리스 API (프론트엔드 통합)
+
+- 위치: `frontend/api/*.ts` (CommonJS `module.exports = handler` 형식)
+- 제공 엔드포인트(모두 `{ success, data }` 반환)
+  - `GET /api/health` → 헬스체크
+  - `GET /api/missions` → 미션 목록(mock)
+  - `POST /api/missions?id=<ID>&action=start` 또는 body로 동일 처리 → 미션 시작(mock)
+  - `GET /api/missions-progress` → 진행상황 배열(mock, 빈 배열)
+  - `GET /api/user` → 사용자 프로필(mock)
+  - `GET /api/badges` → 배지 목록(mock)
+  - `POST /api/badges` → 배지 민팅(mock, tokenId/txHash 반환)
+  - `POST /api/share` → 공유용 단축 링크(slug) 생성
+
+### 소셜 공유(신규)
+
+- 프론트 서비스: `src/services/share.ts`
+  - Web Share API 사용, 미지원 시 Telegram openLink 또는 클립보드 복사
+- UI 통합
+  - 배지 컴포넌트 `SBTBadge.tsx` 에 "자랑하기" 버튼 추가
+  - 대시보드 헤더에 "임팩트 자랑하기" 버튼 추가
+
+### 테스트 체크리스트
+
+- 보호 우회 쿠키 설정 후 페이지 접속
+- /api/health, /api/missions, /api/share 동작 확인(200)
+- 대시보드 렌더 및 배지 공유 버튼 클릭 시 링크 생성 확인
+- WalletConnect Project ID 설정 전: 지갑 연결 안내만 노출(403 발생 없음)
+- Project ID 설정 후: 지갑 연결/네트워크 전환 동작 확인
+
 ## 📊 로드맵 및 비전
 
 ### Phase 1: 한국 시장 안착 (완료 목표)
