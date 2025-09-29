@@ -6,7 +6,7 @@ const mockBadges = [
   { level: 'platinum', missionType: 'carbon_offset', impact: 100, earnedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(), isNew: true },
 ];
 
-export default async function handler(req, res) {
+const handler = async (req, res) => {
   try {
     if (req.method === 'GET') {
       res.json(mockBadges);
@@ -21,6 +21,8 @@ export default async function handler(req, res) {
     console.error('Badges API error:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
-}
+};
+
+module.exports = handler;
 
 

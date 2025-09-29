@@ -7,7 +7,7 @@ const mockMissions = [
   { id: '5', title: '나무 심기 캠페인', description: '도시 숲 조성 프로젝트에 참여하여 5그루의 나무 심기', type: 'carbon_offset', impact: 40, cost: 5000, currency: 'KRW', status: 'pending', deadline: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(), requirements: ['나무 심기 참여', '참여 인증 사진'] },
 ];
 
-export default async function handler(req, res) {
+const handler = async (req, res) => {
   try {
     if (req.method === 'GET') {
       if (req.query.id) {
@@ -33,6 +33,8 @@ export default async function handler(req, res) {
     console.error('Missions API error:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
-}
+};
+
+module.exports = handler;
 
 

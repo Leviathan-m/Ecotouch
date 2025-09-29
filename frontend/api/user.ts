@@ -13,7 +13,7 @@ const mockUser = {
   }
 };
 
-export default async function handler(req, res) {
+const handler = async (req, res) => {
   try {
     if (req.method === 'GET') {
       res.json(mockUser);
@@ -28,6 +28,8 @@ export default async function handler(req, res) {
     console.error('User API error:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
-}
+};
+
+module.exports = handler;
 
 
